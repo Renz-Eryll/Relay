@@ -1,0 +1,13 @@
+node_modules
+.next
+out
+*.tsbuildinfo
+next-env.d.ts
+.DS_Store
+*.log
+
+# Local env files (never commit secrets)
+.env*
+!.env.example
+
+.vercel
