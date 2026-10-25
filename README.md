@@ -6,10 +6,10 @@
 </p>
 
 <p align="center">
-  <a href="https://relay-helpdesk.vercel.app"><b>Live demo</b></a> ·
-  try it as a <a href="https://relay-helpdesk.vercel.app/demo/customer">customer</a>,
-  <a href="https://relay-helpdesk.vercel.app/demo/agent">agent</a> or
-  <a href="https://relay-helpdesk.vercel.app/demo/admin">admin</a> (resets daily)
+  <a href="https://relay-desk.vercel.app"><b>Live demo</b></a> ·
+  try it as a <a href="https://relay-desk.vercel.app/demo/customer">customer</a>,
+  <a href="https://relay-desk.vercel.app/demo/agent">agent</a> or
+  <a href="https://relay-desk.vercel.app/demo/admin">admin</a> (resets daily)
 </p>
 
 ---
