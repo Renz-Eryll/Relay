@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import TicketTable from "@/components/TicketTable";
-import { PageHeader, SectionTitle, StatStrip } from "@/components/ui";
+import { PageHeader, SectionTitle, StatStrip, EmptyNote } from "@/components/ui";
 import { db } from "@/db";
 import { categories } from "@/db/schema";
 import { eq } from "drizzle-orm";
@@ -39,7 +39,7 @@ export default async function QueuePage() {
         {mine.rows.length ? (
           <TicketTable rows={mine.rows} show={["customer"]} />
         ) : (
-          <p className="card px-5 py-8 text-center text-[13px] text-muted">Nothing assigned right now. Claim a ticket below.</p>
+          <EmptyNote>Nothing assigned right now. Claim a ticket below.</EmptyNote>
         )}
       </section>
 
@@ -50,7 +50,7 @@ export default async function QueuePage() {
         {unassigned.rows.length ? (
           <TicketTable rows={unassigned.rows.slice(0, 8)} show={["customer"]} />
         ) : (
-          <p className="card px-5 py-8 text-center text-[13px] text-muted">No unassigned tickets in your category.</p>
+          <EmptyNote>No unassigned tickets in your category.</EmptyNote>
         )}
       </section>
     </>

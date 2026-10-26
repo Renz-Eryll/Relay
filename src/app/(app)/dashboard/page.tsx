@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import TicketTable from "@/components/TicketTable";
-import { Avatar, PageHeader, SectionTitle, StatStrip } from "@/components/ui";
+import { Avatar, PageHeader, SectionTitle, StatStrip, EmptyNote } from "@/components/ui";
 import { requireUser } from "@/lib/auth";
 import { avgResolutionMs, categoryBreakdown, listAgents, listTickets, statusCounts } from "@/lib/data";
 import { duration } from "@/lib/format";
@@ -41,7 +41,7 @@ export default async function DashboardPage() {
           {unassigned.length ? (
             <TicketTable rows={unassigned} show={["customer"]} />
           ) : (
-            <p className="card px-5 py-8 text-center text-[13px] text-muted">Every active ticket has an agent.</p>
+            <EmptyNote>Every active ticket has an agent.</EmptyNote>
           )}
         </section>
 
@@ -58,10 +58,10 @@ export default async function DashboardPage() {
                   </Link>
                   <span className="num">{c.open}</span>
                 </div>
-                <div className="mt-2 h-1.5 rounded-full bg-sunken" aria-hidden>
+                <div className="mt-2 h-1.5 rounded-full bg-sunken dark:bg-line" aria-hidden>
                   <div className="h-1.5 rounded-full bg-brand" style={{ width: `${(c.open / maxOpen) * 100}%` }} />
                 </div>
-                {c.unassigned > 0 && <p className="mt-1.5 text-xs text-amber">{c.unassigned} unassigned</p>}
+                {c.unassigned > 0 && <p className="num mt-1.5 text-[11px] text-amber">{c.unassigned} unassigned</p>}
               </li>
             ))}
           </ul>

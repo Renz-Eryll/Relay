@@ -10,7 +10,7 @@ export default async function ResetPage({ searchParams }: { searchParams: Promis
   const { email = "" } = await searchParams;
   return (
     <AuthShell>
-      <h1 className="text-[26px] font-semibold tracking-tight">Check your email</h1>
+      <h1 className="display text-[28px] leading-tight">Check your email</h1>
       <p className="mt-1.5 text-muted">
         If an account exists for <span className="font-medium text-ink">{email || "that email"}</span>, we sent a 6-digit code. It expires in 10 minutes.
       </p>

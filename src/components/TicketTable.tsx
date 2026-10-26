@@ -27,7 +27,7 @@ export default function TicketTable({ rows, show = ["customer", "agent"] }: { ro
             <Link href={`/tickets/${t.id}`} className="block px-4 py-3">
               <div className="flex items-center justify-between gap-2">
                 <span className="num text-[12px] text-faint">
-                  {ticketRef(t.id)} · {t.category}
+                  <span className="text-brand-ink">{ticketRef(t.id)}</span> · {t.category}
                 </span>
                 <StatusBadge status={t.status} />
               </div>
@@ -47,7 +47,7 @@ export default function TicketTable({ rows, show = ["customer", "agent"] }: { ro
       <table className="w-full table-fixed text-left">
         <thead>
           <tr className="border-b border-line [&>th]:eyebrow [&>th]:px-4 [&>th]:py-2.5 [&>th]:font-medium">
-            <th className="w-[84px]">Ticket</th>
+            <th className="perf w-[92px] border-r">Ticket</th>
             <th>Subject</th>
             {show.includes("customer") && <th className="w-[160px]">Customer</th>}
             {show.includes("agent") && <th className="w-[170px]">Agent</th>}
@@ -58,14 +58,15 @@ export default function TicketTable({ rows, show = ["customer", "agent"] }: { ro
         </thead>
         <tbody className="divide-y divide-line">
           {rows.map((t) => (
-            <tr key={t.id} className="group relative hover:bg-sunken/50">
-              <td className="num px-4 py-3 text-[13px] text-faint">{ticketRef(t.id)}</td>
+            <tr key={t.id} className="group relative transition-colors hover:bg-sunken/60">
+              {/* Ref as a ticket stub: perforated edge, teal on hover. */}
+              <td className="num perf border-r px-4 py-3 text-[13px] text-faint group-hover:text-brand-ink group-hover:shadow-[inset_2px_0_0_var(--color-brand)]">{ticketRef(t.id)}</td>
               <td className="px-4 py-3">
                 {/* Stretched link: the whole row opens the ticket. */}
-                <Link href={`/tickets/${t.id}`} className="block truncate font-medium after:absolute after:inset-0 group-hover:underline group-hover:underline-offset-2">
+                <Link href={`/tickets/${t.id}`} className="block truncate font-medium after:absolute after:inset-0">
                   {t.subject}
                 </Link>
-                <p className="truncate text-xs text-muted">{t.category}</p>
+                <p className="truncate text-xs text-faint">{t.category}</p>
               </td>
               {show.includes("customer") && <td className="truncate px-4 py-3 text-[13px]">{t.customerName}</td>}
               {show.includes("agent") && (
@@ -86,7 +87,7 @@ export default function TicketTable({ rows, show = ["customer", "agent"] }: { ro
               <td className="px-4 py-3">
                 <StatusBadge status={t.status} />
               </td>
-              <td className="px-4 py-3 text-[13px] whitespace-nowrap text-muted">{timeAgo(t.updatedAt)}</td>
+              <td className="num px-4 py-3 text-[12px] whitespace-nowrap text-muted">{timeAgo(t.updatedAt)}</td>
             </tr>
           ))}
         </tbody>
