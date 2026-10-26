@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Forgot password" };
 export default function ForgotPasswordPage() {
   return (
     <AuthShell>
-      <h1 className="text-[26px] font-semibold tracking-tight">Reset your password</h1>
+      <h1 className="display text-[28px] leading-tight">Reset your password</h1>
       <p className="mt-1.5 text-muted">Enter your email and we’ll send you a 6-digit code.</p>
       <ActionForm action={requestReset} className="mt-7 space-y-4">
         <div>

@@ -10,16 +10,22 @@ const ROLES = [
 export default function DemoButtons({ tone = "light" }: { tone?: "light" | "dark" }) {
   return (
     <div className="grid grid-cols-3 gap-2">
-      {ROLES.map((r) => (
+      {ROLES.map((r, i) => (
         <form key={r.role} action={demoLogin.bind(null, r.role)}>
           <SubmitButton
             pending="Opening…"
-            className={`btn h-auto w-full flex-col items-start gap-0.5 px-3 py-2.5 text-left ${
-              tone === "dark" ? "border border-rail-line bg-rail-2 text-rail-ink hover:border-brand" : "border border-line-strong bg-surface hover:border-brand"
+            className={`btn group h-auto w-full flex-col items-start gap-1 px-3 py-2.5 text-left whitespace-normal ${
+              tone === "dark" ? "border border-rail-line bg-rail-2 text-rail-ink hover:border-brand" : "border border-line-strong bg-surface hover:border-brand hover:bg-brand-soft/30"
             }`}
           >
-            <span className="text-[13px] font-medium">{r.label}</span>
-            <span className={`text-[11px] font-normal ${tone === "dark" ? "text-rail-muted" : "text-muted"}`}>{r.hint}</span>
+            <span className="flex w-full items-center justify-between gap-2">
+              <span className="num text-[10px] text-brand-ink">{String(i + 1).padStart(2, "0")}</span>
+              <span className={`transition-transform group-hover:translate-x-0.5 ${tone === "dark" ? "text-rail-muted" : "text-faint"} group-hover:text-brand`} aria-hidden>
+                →
+              </span>
+            </span>
+            <span className="text-[13px] font-semibold">{r.label}</span>
+            <span className={`text-[11px] leading-snug font-normal ${tone === "dark" ? "text-rail-muted" : "text-muted"}`}>{r.hint}</span>
           </SubmitButton>
         </form>
       ))}

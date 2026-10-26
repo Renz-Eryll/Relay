@@ -44,37 +44,20 @@ export function SideNav({ items }: { items: NavItem[] }) {
               active ? "bg-rail-2 font-medium text-rail-ink" : "text-rail-muted hover:bg-rail-2/60 hover:text-rail-ink"
             }`}
           >
-            {active && <span className="absolute top-1.5 bottom-1.5 -left-3 w-[3px] rounded-r bg-brand" aria-hidden />}
+            {/* The baton: active page marker. */}
+            {active && <span className="absolute top-1/2 -left-3 h-5 w-[4px] -translate-y-1/2 rounded-r-full bg-brand shadow-[0_0_12px_var(--color-brand)]" aria-hidden />}
             <span className={active ? "text-brand" : ""}>
               <Icon name={item.icon} />
             </span>
             <span className="flex-1">{item.label}</span>
             {!!item.badge && (
-              <span className="num rounded-[4px] bg-brand px-1.5 text-[11px] leading-5 font-medium text-white" aria-label={`${item.badge} unread`}>
+              <span className="num rounded-[4px] bg-brand px-1.5 text-[11px] leading-5 font-semibold text-on-brand" aria-label={`${item.badge} unread`}>
                 {item.badge > 99 ? "99+" : item.badge}
               </span>
             )}
           </Link>
         );
       })}
-    </nav>
-  );
-}
-
-export function TopNav({ items }: { items: NavItem[] }) {
-  const pathname = usePathname();
-  return (
-    <nav className="-mx-4 flex gap-1 overflow-x-auto px-4 pb-3">
-      {items.map((item) => (
-        <Link
-          key={item.href}
-          href={item.href}
-          className={`shrink-0 rounded-[6px] px-3 py-1.5 text-[13px] ${isActive(pathname, item.href, items) ? "bg-rail-2 text-rail-ink" : "text-rail-muted"}`}
-        >
-          {item.label}
-          {!!item.badge && <span className="num ml-1.5 text-brand">{item.badge}</span>}
-        </Link>
-      ))}
     </nav>
   );
 }

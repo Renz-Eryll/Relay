@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Create an account" };
 export default function SignupPage() {
   return (
     <AuthShell>
-      <h1 className="text-[26px] font-semibold tracking-tight">Create an account</h1>
+      <h1 className="display text-[28px] leading-tight">Create an account</h1>
       <p className="mt-1.5 text-muted">Raise tickets and follow every reply.</p>
 
       <ActionForm action={signup} className="mt-7 space-y-4">

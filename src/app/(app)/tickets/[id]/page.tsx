@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { and, eq, isNull } from "drizzle-orm";
 import { assignAgent, claimTicket, replyToTicket, setPriority, setStatus } from "@/app/actions/tickets";
 import { ActionForm, ConfirmButton, SubmitButton } from "@/components/forms";
-import { Avatar, PriorityTag, StatusBadge } from "@/components/ui";
+import { Avatar, PriorityTag, RelayTrack, StatusBadge } from "@/components/ui";
 import { db } from "@/db";
 import { notifications } from "@/db/schema";
 import { requireUser } from "@/lib/auth";
@@ -60,61 +60,79 @@ export default async function TicketPage({ params, searchParams }: Props) {
         </p>
       )}
 
-      <div className="mb-6">
-        <p className="num text-[13px] text-faint">
-          {ticketRef(id)} · {category.name}
-        </p>
-        <h1 className="mt-1 text-[24px] leading-tight font-semibold tracking-tight">{ticket.subject}</h1>
-        <div className="mt-2.5 flex flex-wrap items-center gap-3">
-          <StatusBadge status={ticket.status} />
-          <PriorityTag priority={ticket.priority} />
-          <span className="text-[13px] text-muted">Updated {timeAgo(ticket.updatedAt)}</span>
+      {/* Ticket stub: the ref on a perforated tear-off, the relay track beside it. */}
+      <header className="card relative mb-8 overflow-hidden sm:flex">
+        <div className="perf flex items-center justify-between gap-3 border-b bg-sunken/50 px-5 py-4 sm:w-44 sm:shrink-0 sm:flex-col sm:items-start sm:border-r sm:border-b-0">
+          <p className="eyebrow">Ticket</p>
+          <p className="num text-[26px] leading-none font-medium tracking-tight text-brand-ink">{ticketRef(id)}</p>
+          <p className="truncate text-xs text-muted">{category.name}</p>
         </div>
-      </div>
+        <span className="absolute -top-2 left-[calc(11rem-8px)] hidden size-4 rounded-full border border-line bg-paper sm:block" aria-hidden />
+        <span className="absolute -bottom-2 left-[calc(11rem-8px)] hidden size-4 rounded-full border border-line bg-paper sm:block" aria-hidden />
+        <div className="min-w-0 flex-1 px-5 py-4 sm:px-6">
+          <h1 className="display text-[22px] leading-tight sm:text-[24px]">{ticket.subject}</h1>
+          <div className="mt-2.5 flex flex-wrap items-center gap-3">
+            <StatusBadge status={ticket.status} />
+            <PriorityTag priority={ticket.priority} />
+            <span className="text-[13px] text-muted">Updated {timeAgo(ticket.updatedAt)}</span>
+          </div>
+          <RelayTrack status={ticket.status} className="mt-5 max-w-xl" />
+        </div>
+      </header>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_18rem]">
         <div className="min-w-0">
-          <ol className="space-y-4">
-            <li className="card p-5">
-              <div className="flex items-center gap-3">
+          {/* The thread: one line joins the opening message, every reply and every handoff. */}
+          <ol className="relative space-y-4 before:absolute before:top-4 before:bottom-4 before:left-[15px] before:w-px before:bg-line-strong">
+            <li className="relative flex gap-4">
+              <span className="relative z-10 rounded-full ring-4 ring-paper">
                 <Avatar name={customer.name} />
-                <div className="min-w-0">
-                  <p className="text-[13px] font-medium">{customer.name}</p>
-                  <p className="text-xs text-faint">{dateTimeLabel(ticket.createdAt)}</p>
+              </span>
+              <div className="card min-w-0 flex-1 p-5">
+                <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
+                  <p className="text-[13px] font-medium">
+                    {customer.name} <span className="font-normal text-muted">opened the ticket</span>
+                  </p>
+                  <p className="num text-[11px] text-faint">{dateTimeLabel(ticket.createdAt)}</p>
                 </div>
+                <p className="mt-3 whitespace-pre-wrap">{ticket.description}</p>
               </div>
-              <p className="mt-3 whitespace-pre-wrap">{ticket.description}</p>
             </li>
 
             {timeline.map((item) =>
               item.kind === "message" ? (
-                <li key={`m${item.m.id}`} className={`card p-5 ${item.m.authorRole !== "customer" ? "border-l-2 border-l-brand" : ""}`}>
-                  <div className="flex items-center gap-3">
+                <li key={`m${item.m.id}`} className="relative flex gap-4">
+                  <span className="relative z-10 rounded-full ring-4 ring-paper">
                     <Avatar name={item.m.authorName} />
-                    <div className="min-w-0">
+                  </span>
+                  <div className={`card min-w-0 flex-1 p-5 ${item.m.authorRole !== "customer" ? "border-l-2 border-l-brand" : ""}`}>
+                    <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
                       <p className="flex items-center gap-2 text-[13px] font-medium">
                         {item.m.authorName}
-                        {ROLE_TAG[item.m.authorRole] && <span className="rounded-[4px] bg-brand-soft px-1.5 text-[10px] font-medium text-brand-ink">{ROLE_TAG[item.m.authorRole]}</span>}
+                        {ROLE_TAG[item.m.authorRole] && <span className="num rounded-[4px] bg-brand-soft px-1.5 text-[10px] font-medium tracking-wide text-brand-ink uppercase">{ROLE_TAG[item.m.authorRole]}</span>}
                       </p>
-                      <p className="text-xs text-faint">{dateTimeLabel(item.m.createdAt)}</p>
+                      <p className="num text-[11px] text-faint">{dateTimeLabel(item.m.createdAt)}</p>
                     </div>
+                    <p className="mt-3 whitespace-pre-wrap">{item.m.body}</p>
                   </div>
-                  <p className="mt-3 whitespace-pre-wrap">{item.m.body}</p>
                 </li>
               ) : (
-                <li key={`e${item.e.id}`} className="flex items-center gap-2 px-2 text-[12px] text-muted">
-                  <span className="size-1.5 rounded-full bg-line-strong" aria-hidden />
-                  <span>
-                    <span className="font-medium text-ink">{item.e.actorName ?? "Someone"}</span> {item.e.type === "assigned" && item.e.toValue === item.e.actorName ? "claimed the ticket" : EVENT_TEXT[item.e.type](item.e)}
+                <li key={`e${item.e.id}`} className="relative flex items-center gap-4 text-[12px] text-muted">
+                  {/* Handoff node on the thread. */}
+                  <span className="relative z-10 grid size-8 shrink-0 place-items-center" aria-hidden>
+                    <span className="size-2.5 rotate-45 border border-brand bg-paper" />
                   </span>
-                  <span className="text-faint">· {timeAgo(item.e.createdAt)}</span>
+                  <span className="min-w-0">
+                    <span className="font-medium text-ink">{item.e.actorName ?? "Someone"}</span> {item.e.type === "assigned" && item.e.toValue === item.e.actorName ? "claimed the ticket" : EVENT_TEXT[item.e.type](item.e)}
+                    <span className="num text-faint"> · {timeAgo(item.e.createdAt)}</span>
+                  </span>
                 </li>
               ),
             )}
           </ol>
 
           {canReply(user, ticket) ? (
-            <ActionForm action={replyToTicket.bind(null, id)} className="card mt-5 space-y-3 p-4">
+            <ActionForm action={replyToTicket.bind(null, id)} className="card mt-5 space-y-3 p-4 sm:ml-12">
               <label htmlFor="body" className="sr-only">
                 Reply
               </label>
@@ -132,13 +150,13 @@ export default async function TicketPage({ params, searchParams }: Props) {
               </div>
             </ActionForm>
           ) : (
-            <p className="mt-5 rounded-[6px] border border-dashed border-line-strong px-4 py-3 text-[13px] text-muted">
+            <p className="perf mt-5 rounded-[6px] border px-4 py-3 text-[13px] text-muted sm:ml-12">
               {ticket.status === "closed" ? "This ticket is closed. Reopen it to continue the conversation." : "You can view this ticket but can’t reply."}
             </p>
           )}
         </div>
 
-        <aside className="space-y-4 lg:sticky lg:top-6 lg:self-start">
+        <aside className="space-y-4 lg:sticky lg:top-20 lg:self-start">
           <section className="card divide-y divide-line">
             <dl className="space-y-3 p-4 text-[13px]">
               <div>

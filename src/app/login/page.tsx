@@ -11,7 +11,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const { reset, error } = await searchParams;
   return (
     <AuthShell>
-      <h1 className="text-[26px] font-semibold tracking-tight">Sign in</h1>
+      <h1 className="display text-[28px] leading-tight">Sign in</h1>
       <p className="mt-1.5 text-muted">Welcome back to Relay.</p>
       {reset && <p className="mt-4 rounded-[6px] bg-ok-soft px-3 py-2 text-[13px] text-ok">Password updated. Sign in with your new password.</p>}
 

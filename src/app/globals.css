@@ -1,43 +1,86 @@
 @import "tailwindcss";
 
-/* Relay design system: dark slate rail, cool light canvas, hairline borders,
-   6px radius, a single teal brand colour, mono for ticket numbers and counts. */
+/* Relay design system.
+   A dark rail frames the work in both themes; the canvas flips between a cool light paper and a deep slate.
+   One teal brand colour. Three motifs carry the identity:
+   - the ticket stub: mono ref number, perforated (dashed) edges and punched notches
+   - the relay track: Open → In progress → Resolved → Closed drawn as legs of a race
+   - the thread: one vertical line joining every reply and handoff on a ticket
+   Type: Archivo (expanded) for display, IBM Plex Sans for text, IBM Plex Mono for refs and counts. */
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 @theme {
-  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-sans: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+  --font-display: var(--font-archivo), var(--font-plex), sans-serif;
 
   --color-rail: #0f1720;
-  --color-rail-2: #1a2430;
-  --color-rail-line: #26323f;
-  --color-rail-ink: #f3f6f9;
-  --color-rail-muted: #93a1b0;
+  --color-rail-2: #18222d;
+  --color-rail-line: #243140;
+  --color-rail-ink: #f1f5f8;
+  --color-rail-muted: #91a0b0;
 
-  --color-paper: #f4f6f9;
+  --color-paper: #f2f4f7;
   --color-surface: #ffffff;
-  --color-sunken: #eef1f5;
-  --color-ink: #111827;
+  --color-sunken: #ebeef2;
+  --color-ink: #0f1720;
   --color-muted: #4b5563;
-  --color-faint: #8a94a3;
-  --color-line: #e1e6ec;
-  --color-line-strong: #c9d1db;
+  --color-faint: #8590a0;
+  --color-line: #dfe4ea;
+  --color-line-strong: #c5ced9;
 
   --color-brand: #0f9f8f;
   --color-brand-ink: #0b7a6e;
-  --color-brand-soft: #dff4f1;
+  --color-brand-soft: #dbf2ee;
+  --color-on-brand: #ffffff;
 
   --color-sky: #0369a1;
   --color-sky-soft: #e0f2fe;
   --color-amber: #b45309;
-  --color-amber-soft: #fef3c7;
+  --color-amber-soft: #fdf0cf;
   --color-ok: #15803d;
-  --color-ok-soft: #dcfce7;
+  --color-ok-soft: #dcf5e3;
   --color-danger: #b91c1c;
-  --color-danger-soft: #fee2e2;
+  --color-danger-soft: #fde4e4;
 }
 
 :root {
   color-scheme: light;
+}
+
+/* Unlayered, so it wins over the @theme defaults. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-rail: #080c11;
+  --color-rail-2: #111921;
+  --color-rail-line: #1c2630;
+  --color-rail-ink: #eef3f7;
+  --color-rail-muted: #8796a6;
+
+  --color-paper: #0c1218;
+  --color-surface: #121a22;
+  --color-sunken: #18222c;
+  --color-ink: #e6ecf1;
+  --color-muted: #9aa7b4;
+  --color-faint: #6a7887;
+  --color-line: #1f2a35;
+  --color-line-strong: #2e3b48;
+
+  --color-brand: #19b2a0;
+  --color-brand-ink: #4fd4c2;
+  --color-brand-soft: #0d2a28;
+  --color-on-brand: #03201d;
+
+  --color-sky: #6cc0f2;
+  --color-sky-soft: #0f2637;
+  --color-amber: #f2b54f;
+  --color-amber-soft: #2e2310;
+  --color-ok: #55c98f;
+  --color-ok-soft: #10291d;
+  --color-danger: #f2786b;
+  --color-danger-soft: #331719;
 }
 
 @layer base {
@@ -45,22 +88,32 @@
     @apply bg-paper font-sans text-[14px] leading-[1.5] text-ink antialiased;
   }
   ::selection {
-    background: var(--color-brand-soft);
+    background: color-mix(in oklab, var(--color-brand) 35%, transparent);
   }
   :focus-visible {
     outline: 2px solid var(--color-brand);
     outline-offset: 2px;
   }
+  select option {
+    background: var(--color-surface);
+    color: var(--color-ink);
+  }
 }
 
+@utility display {
+  font-family: var(--font-display);
+  font-stretch: 116%;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
 @utility eyebrow {
-  @apply text-[11px] font-medium tracking-[0.06em] text-faint uppercase;
+  @apply font-mono text-[11px] font-medium tracking-[0.08em] text-faint uppercase;
 }
 @utility card {
   @apply rounded-[6px] border border-line bg-surface;
 }
 @utility field {
-  @apply h-10 w-full rounded-[6px] border border-line-strong bg-surface px-3 text-[14px] text-ink placeholder:text-faint transition-colors hover:border-faint focus:border-brand focus:outline-none;
+  @apply h-10 w-full rounded-[6px] border border-line-strong bg-surface px-3 text-[14px] text-ink placeholder:text-faint transition-colors hover:border-faint focus:border-brand focus:outline-none dark:bg-sunken/60;
 }
 @utility label {
   @apply mb-1.5 block text-[13px] font-medium text-ink;
@@ -69,10 +122,10 @@
   @apply inline-flex h-9 items-center justify-center gap-2 rounded-[6px] px-3.5 text-[13px] font-medium whitespace-nowrap transition-colors disabled:pointer-events-none disabled:opacity-50;
 }
 @utility btn-primary {
-  @apply btn bg-brand text-white hover:bg-brand-ink;
+  @apply btn bg-brand font-semibold text-on-brand hover:bg-brand-ink;
 }
 @utility btn-dark {
-  @apply btn bg-ink text-white hover:bg-ink/85;
+  @apply btn bg-ink text-paper hover:bg-ink/85;
 }
 @utility btn-outline {
   @apply btn border border-line-strong bg-surface text-ink hover:border-faint;
@@ -91,4 +144,12 @@
 }
 @utility tab-active {
   @apply tab border-brand text-ink;
+}
+/* Perforation: the dashed tear line of a ticket stub. */
+@utility perf {
+  @apply border-dashed border-line-strong;
+}
+/* Running-track lanes, a quiet texture for dark hero panels. */
+@utility lanes {
+  background-image: repeating-linear-gradient(0deg, transparent 0 55px, color-mix(in oklab, var(--color-rail-ink) 4%, transparent) 55px 56px);
 }
