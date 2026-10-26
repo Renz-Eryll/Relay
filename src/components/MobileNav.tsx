@@ -15,10 +15,15 @@ export default function MobileNav({ items, header, label, footer }: { items: Nav
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    // The panel is hidden from lg up; close it there so the page doesn't stay scroll-locked.
+    const desktop = window.matchMedia("(min-width: 64rem)");
+    const onResize = () => desktop.matches && setOpen(false);
     document.addEventListener("keydown", onKey);
+    desktop.addEventListener("change", onResize);
     document.body.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", onKey);
+      desktop.removeEventListener("change", onResize);
       document.body.style.overflow = "";
     };
   }, [open]);
