@@ -7,12 +7,13 @@ import { ActionForm, SubmitButton } from "@/components/forms";
 
 export const metadata: Metadata = { title: "Sign in" };
 
-export default async function LoginPage({ searchParams }: { searchParams: Promise<{ reset?: string; error?: string }> }) {
-  const { reset, error } = await searchParams;
+export default async function LoginPage({ searchParams }: { searchParams: Promise<{ reset?: string; error?: string; expired?: string }> }) {
+  const { reset, error, expired } = await searchParams;
   return (
     <AuthShell>
       <h1 className="display text-[28px] leading-tight">Sign in</h1>
       <p className="mt-1.5 text-muted">Welcome back to Relay.</p>
+      {expired && <p className="mt-4 rounded-[6px] border border-line bg-sunken px-3 py-2 text-[13px] text-muted">Your session ended (the demo resets every day). Sign in again or pick a demo role below.</p>}
       {reset && <p className="mt-4 rounded-[6px] bg-ok-soft px-3 py-2 text-[13px] text-ok">Password updated. Sign in with your new password.</p>}
 
       <ActionForm action={login} className="mt-7 space-y-4">

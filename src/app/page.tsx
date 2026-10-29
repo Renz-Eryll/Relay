@@ -5,7 +5,7 @@ import Logo from "@/components/Logo";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Avatar, PriorityTag, RelayTrack, StatusBadge } from "@/components/ui";
 import type { Status } from "@/db/schema";
-import { getSession } from "@/lib/auth";
+import { currentUser } from "@/lib/auth";
 import { HOME } from "@/lib/session";
 
 // How a ticket moves: one leg per status, and who carries it.
@@ -42,8 +42,9 @@ const FEATURES = [
 ];
 
 export default async function LandingPage() {
-  const session = await getSession();
-  if (session) redirect(HOME[session.role]);
+  // The user, not just the cookie: a cookie left over from a reset demo account shows the landing page.
+  const user = await currentUser();
+  if (user) redirect(HOME[user.role]);
 
   return (
     <div className="min-h-dvh overflow-x-clip">

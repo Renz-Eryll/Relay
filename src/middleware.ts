@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { HOME, SESSION_COOKIE, verifySession } from "@/lib/session";
 
-const PUBLIC = ["/", "/login", "/signup", "/forgot-password", "/terms", "/demo"];
+const PUBLIC = ["/", "/login", "/signup", "/forgot-password", "/terms", "/demo", "/session-expired"];
 const AUTH_ONLY = ["/login", "/signup", "/forgot-password"];
 
 const matches = (pathname: string, list: string[]) => list.some((p) => pathname === p || (p !== "/" && pathname.startsWith(`${p}/`)));
