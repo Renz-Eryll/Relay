@@ -12,7 +12,8 @@
     "test": "vitest run",
     "db:setup": "tsx src/db/setup.ts",
     "db:push": "drizzle-kit push",
-    "db:seed": "tsx src/db/seed.ts"
+    "db:seed": "tsx src/db/seed.ts",
+    "eval:triage": "tsx evals/triage/run.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^4.0.107",
