@@ -4,6 +4,7 @@ import { randomBytes } from "crypto";
 import bcrypt from "bcryptjs";
 import { inArray, sql } from "drizzle-orm";
 import { db } from "../db";
+import { embedTickets } from "./ai/similar";
 import { CATEGORIES } from "./catalog";
 import { categories, messages, notifications, ticketEvents, tickets, users, type Priority, type Status } from "../db/schema";
 
@@ -154,6 +155,13 @@ export async function seedDemo() {
       ]);
     }
   }
+
+  // Vectors for "similar resolved tickets" in AI drafts, in one call. AI trouble never breaks the reset.
+  const demoTickets = await db
+    .select({ id: tickets.id, subject: tickets.subject, description: tickets.description })
+    .from(tickets)
+    .where(inArray(tickets.customerId, customers.map((c) => c.id)));
+  await embedTickets(demoTickets).catch((e) => console.error("Couldn't embed demo tickets", e));
 
   // Keep the id sequence ahead of the data after deletes.
   await db.execute(sql`select setval(pg_get_serial_sequence('tickets','id'), coalesce(max(id), 1)) from tickets`);

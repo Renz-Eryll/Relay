@@ -8,6 +8,7 @@ import { z } from "zod";
 import { db } from "@/db";
 import { categories, messages, ticketEvents, tickets, users, type Priority, type Status } from "@/db/schema";
 import { settleTriage, triageTicket } from "@/lib/ai/run-triage";
+import { embedTicket } from "@/lib/ai/similar";
 import { ActionError, actor, runAction, type ActionState } from "@/lib/auth";
 import { PRIORITIES, PRIORITY, STATUS, STATUSES } from "@/lib/labels";
 import { notifyUsers, staffFor, titled, adminIds } from "@/lib/notify";
@@ -47,8 +48,11 @@ export async function createTicket(_: ActionState, form: FormData): Promise<Acti
       title: `New ${category.name} ticket`,
       body: `${user.name}: ${titled(ticket.id, ticket.subject)}`,
     });
-    // Relay AI triages after the response, so the customer never waits on it.
-    after(() => triageTicket(ticket.id));
+    // Relay AI embeds and triages after the response, so the customer never waits on it.
+    after(async () => {
+      await embedTicket(ticket.id).catch((e) => console.error(`Embedding failed for ticket ${ticket.id}`, e));
+      await triageTicket(ticket.id);
+    });
     revalidatePath("/", "layout");
     redirect(`/tickets/${ticket.id}?created=1`);
   });

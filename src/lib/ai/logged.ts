@@ -23,6 +23,9 @@ async function usageToday({ feature, userId }: CallMeta) {
   return { site: site.n, user: user.n };
 }
 
+// Some providers report no usage (Gemini embeddings come back as NaN); store only real counts.
+const tokens = (n: number | undefined) => (Number.isFinite(n) ? n! : null);
+
 // Runs one AI call inside the free-tier limits and records it (success or failure) in ai_requests.
 export async function logged<T>(meta: CallMeta, call: () => Promise<{ value: T; usage?: Usage }>): Promise<T> {
   if (!aiEnabled()) throw new AiUnavailableError("Relay AI is turned off.");
@@ -38,8 +41,8 @@ export async function logged<T>(meta: CallMeta, call: () => Promise<{ value: T; 
       ticketId: meta.ticketId ?? null,
       ok,
       latencyMs: Date.now() - started,
-      inputTokens: usage?.inputTokens ?? null,
-      outputTokens: usage?.outputTokens ?? null,
+      inputTokens: tokens(usage?.inputTokens),
+      outputTokens: tokens(usage?.outputTokens),
     });
 
   try {

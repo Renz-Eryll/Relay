@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import { and, eq, isNull } from "drizzle-orm";
 import { assignAgent, claimTicket, replyToTicket, setCategory, setPriority, setStatus } from "@/app/actions/tickets";
 import { TriageCard } from "@/components/ai";
+import { ReplyBox } from "@/components/ReplyBox";
 import { ActionForm, ConfirmButton, SubmitButton } from "@/components/forms";
 import { Avatar, PriorityTag, RelayTrack, StatusBadge } from "@/components/ui";
 import { db } from "@/db";
 import { notifications } from "@/db/schema";
 import { requireUser } from "@/lib/auth";
+import { aiEnabled } from "@/lib/ai/provider";
 import { latestTriage } from "@/lib/ai/run-triage";
 import { getTicket, listAgents, listCategories } from "@/lib/data";
 import { dateTimeLabel, timeAgo } from "@/lib/format";
@@ -137,22 +139,13 @@ export default async function TicketPage({ params, searchParams }: Props) {
           </ol>
 
           {canReply(user, ticket) ? (
-            <ActionForm action={replyToTicket.bind(null, id)} className="card mt-5 space-y-3 p-4 sm:ml-12">
-              <label htmlFor="body" className="sr-only">
-                Reply
-              </label>
-              <textarea
-                id="body"
-                name="body"
-                rows={4}
-                required
-                maxLength={5000}
+            <ActionForm action={replyToTicket.bind(null, id)} className="card mt-5 p-4 sm:ml-12">
+              <ReplyBox
+                ticketId={id}
                 placeholder={user.role === "customer" ? "Add more details or reply to the agent…" : `Reply to ${customer.name}…`}
-                className="field h-auto resize-y py-2.5"
+                canDraft={staff && aiEnabled()}
+                linkSources={user.role === "admin"}
               />
-              <div className="flex justify-end">
-                <SubmitButton pending="Sending…">Send reply</SubmitButton>
-              </div>
             </ActionForm>
           ) : (
             <p className="perf mt-5 rounded-[6px] border px-4 py-3 text-[13px] text-muted sm:ml-12">

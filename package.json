@@ -13,7 +13,8 @@
     "db:setup": "tsx src/db/setup.ts",
     "db:push": "drizzle-kit push",
     "db:seed": "tsx src/db/seed.ts",
-    "eval:triage": "tsx evals/triage/run.ts"
+    "eval:triage": "tsx evals/triage/run.ts",
+    "ai:embed": "tsx src/db/embed.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^4.0.107",
