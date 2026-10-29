@@ -2,7 +2,7 @@
 // classifyTicket is pure (no database), so production and the eval script run the same code.
 import { generateText, Output } from "ai";
 import { z } from "zod";
-import type { Priority } from "../../db/schema";
+import type { Priority, TriageOutcome } from "../../db/schema";
 import { PRIORITY_HINT } from "../labels";
 import { chatModel, modelId } from "./provider";
 
@@ -71,3 +71,17 @@ export async function classifyTicket(ticket: TicketText, categories: CategoryInf
 // than taking the lowest value; the held-out test split reports how it actually performs.
 export const AUTO_APPLY_THRESHOLD = 0.9;
 export const shouldAutoApply = (t: Pick<Triage, "confidence">, threshold = AUTO_APPLY_THRESHOLD) => t.confidence >= threshold;
+
+// The agent Relay AI assigns: the least-loaded agent in the category (ties go to the first by name).
+// A rule in code rather than a model choice, so it's predictable and easy to explain.
+export function pickAgent<A extends { categoryId: number | null; active: number }>(agents: A[], categoryId: number): A | null {
+  return agents.filter((a) => a.categoryId === categoryId).reduce<A | null>((best, a) => (!best || a.active < best.active ? a : best), null);
+}
+
+// When a person acts on a triaged ticket, whether that confirms or corrects the AI. null = leave it as it is.
+// Feeds the override rate on the dashboard.
+export function settleOutcome(current: TriageOutcome, predictedCategoryId: number | null, chosenCategoryId: number): TriageOutcome | null {
+  if (current === "review" || current === "failed") return predictedCategoryId === chosenCategoryId ? "accepted" : "overridden";
+  if (current === "auto" && predictedCategoryId !== chosenCategoryId) return "overridden";
+  return null;
+}

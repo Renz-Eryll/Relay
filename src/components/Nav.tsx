@@ -7,6 +7,7 @@ export type NavItem = { href: string; label: string; icon: keyof typeof ICONS; b
 
 export const ICONS = {
   dashboard: <path d="M4 4h7v7H4V4Zm9 0h7v7h-7V4ZM4 13h7v7H4v-7Zm9 0h7v7h-7v-7Z" />,
+  ai: <path d="M12 3.5 13.9 9l5.6 1.9-5.6 1.9L12 18.4l-1.9-5.6L4.5 10.9 10.1 9 12 3.5ZM18.5 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2Z" />,
   queue: <path d="M4 6h16M4 12h16M4 18h10" />,
   tickets: <path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4V7Zm10-2v12" />,
   new: <path d="M12 5v14M5 12h14" />,
@@ -51,7 +52,7 @@ export function SideNav({ items }: { items: NavItem[] }) {
             </span>
             <span className="flex-1">{item.label}</span>
             {!!item.badge && (
-              <span className="num rounded-[4px] bg-brand px-1.5 text-[11px] leading-5 font-semibold text-on-brand" aria-label={`${item.badge} unread`}>
+              <span className="num rounded-[4px] bg-brand px-1.5 text-[11px] leading-5 font-semibold text-on-brand" aria-label={`${item.badge} new`}>
                 {item.badge > 99 ? "99+" : item.badge}
               </span>
             )}
