@@ -23,7 +23,7 @@ export const currentUser = cache(async () => {
 
 export async function requireUser(...roles: Role[]) {
   const user = await currentUser();
-  if (!user) redirect("/login");
+  if (!user) redirect((await getSession()) ? "/session-expired" : "/login");
   if (roles.length && !roles.includes(user.role)) redirect(HOME[user.role]);
   return user;
 }
