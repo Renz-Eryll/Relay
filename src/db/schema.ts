@@ -1,9 +1,11 @@
-import { boolean, index, integer, pgEnum, pgTable, serial, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import { boolean, index, integer, pgEnum, pgTable, real, serial, text, timestamp, uniqueIndex, uuid, vector } from "drizzle-orm/pg-core";
 
 export const roleEnum = pgEnum("role", ["customer", "agent", "admin"]);
 export const statusEnum = pgEnum("ticket_status", ["open", "in_progress", "resolved", "closed"]);
 export const priorityEnum = pgEnum("ticket_priority", ["low", "medium", "high", "urgent"]);
-export const eventEnum = pgEnum("ticket_event", ["created", "status", "priority", "assigned", "unassigned"]);
+export const eventEnum = pgEnum("ticket_event", ["created", "status", "priority", "assigned", "unassigned", "category"]);
+export const triageOutcomeEnum = pgEnum("triage_outcome", ["auto", "review", "accepted", "overridden", "failed"]);
+export const aiFeatureEnum = pgEnum("ai_feature", ["triage", "embed", "draft", "summary"]);
 
 // The product areas customers raise tickets about; agents specialise in one.
 export const categories = pgTable("categories", {
@@ -86,9 +88,79 @@ export const ticketEvents = pgTable(
     type: eventEnum("type").notNull(),
     fromValue: text("from_value"),
     toValue: text("to_value"),
+    // Changes made by Relay AI (auto-triage) rather than a person.
+    byAi: boolean("by_ai").notNull().default(false),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [index("events_ticket_idx").on(t.ticketId, t.createdAt)],
+);
+
+// One AI triage run per ticket: the prediction, the customer's own pick (the baseline) and what happened next.
+export const ticketTriage = pgTable(
+  "ticket_triage",
+  {
+    id: serial("id").primaryKey(),
+    ticketId: integer("ticket_id")
+      .notNull()
+      .references(() => tickets.id, { onDelete: "cascade" }),
+    model: text("model").notNull(),
+    categoryId: integer("category_id").references(() => categories.id, { onDelete: "set null" }),
+    priority: priorityEnum("priority"),
+    confidence: real("confidence"),
+    reason: text("reason"),
+    customerCategoryId: integer("customer_category_id").references(() => categories.id, { onDelete: "set null" }),
+    customerPriority: priorityEnum("customer_priority").notNull(),
+    outcome: triageOutcomeEnum("outcome").notNull(),
+    latencyMs: integer("latency_ms"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("triage_ticket_idx").on(t.ticketId), index("triage_outcome_idx").on(t.outcome, t.createdAt)],
+);
+
+// Vector of each ticket's subject and description, for finding similar resolved tickets.
+export const ticketEmbeddings = pgTable(
+  "ticket_embeddings",
+  {
+    ticketId: integer("ticket_id")
+      .primaryKey()
+      .references(() => tickets.id, { onDelete: "cascade" }),
+    embedding: vector("embedding", { dimensions: 768 }).notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("embeddings_hnsw_idx").using("hnsw", t.embedding.op("vector_cosine_ops"))],
+);
+
+// Catch-up summaries for an agent picking up a ticket; covers the thread up to a message.
+export const ticketSummaries = pgTable(
+  "ticket_summaries",
+  {
+    id: serial("id").primaryKey(),
+    ticketId: integer("ticket_id")
+      .notNull()
+      .references(() => tickets.id, { onDelete: "cascade" }),
+    upToMessageId: integer("up_to_message_id"),
+    body: text("body").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("summaries_ticket_idx").on(t.ticketId, t.createdAt)],
+);
+
+// Every AI call: for daily limits on the free tier, and for the dashboard.
+export const aiRequests = pgTable(
+  "ai_requests",
+  {
+    id: serial("id").primaryKey(),
+    userId: uuid("user_id").references(() => users.id, { onDelete: "set null" }),
+    feature: aiFeatureEnum("feature").notNull(),
+    ticketId: integer("ticket_id").references(() => tickets.id, { onDelete: "set null" }),
+    model: text("model").notNull(),
+    ok: boolean("ok").notNull(),
+    latencyMs: integer("latency_ms").notNull(),
+    inputTokens: integer("input_tokens"),
+    outputTokens: integer("output_tokens"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("ai_requests_day_idx").on(t.createdAt), index("ai_requests_user_idx").on(t.userId, t.feature, t.createdAt)],
 );
 
 // One notifications table for every role.
@@ -126,3 +198,5 @@ export type Status = (typeof statusEnum.enumValues)[number];
 export type Priority = (typeof priorityEnum.enumValues)[number];
 export type Ticket = typeof tickets.$inferSelect;
 export type Category = typeof categories.$inferSelect;
+export type AiFeature = (typeof aiFeatureEnum.enumValues)[number];
+export type TriageOutcome = (typeof triageOutcomeEnum.enumValues)[number];

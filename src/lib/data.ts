@@ -105,7 +105,7 @@ export async function getTicket(v: Viewer, id: number) {
       .where(eq(messages.ticketId, id))
       .orderBy(asc(messages.createdAt)),
     db
-      .select({ id: ticketEvents.id, type: ticketEvents.type, fromValue: ticketEvents.fromValue, toValue: ticketEvents.toValue, createdAt: ticketEvents.createdAt, actorName: users.name })
+      .select({ id: ticketEvents.id, type: ticketEvents.type, fromValue: ticketEvents.fromValue, toValue: ticketEvents.toValue, byAi: ticketEvents.byAi, createdAt: ticketEvents.createdAt, actorName: users.name })
       .from(ticketEvents)
       .leftJoin(users, eq(ticketEvents.actorId, users.id))
       .where(eq(ticketEvents.ticketId, id))
