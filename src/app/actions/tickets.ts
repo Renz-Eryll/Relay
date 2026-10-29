@@ -2,10 +2,12 @@
 
 import { and, eq, isNull } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { db } from "@/db";
 import { categories, messages, ticketEvents, tickets, users, type Priority, type Status } from "@/db/schema";
+import { settleTriage, triageTicket } from "@/lib/ai/run-triage";
 import { ActionError, actor, runAction, type ActionState } from "@/lib/auth";
 import { PRIORITIES, PRIORITY, STATUS, STATUSES } from "@/lib/labels";
 import { notifyUsers, staffFor, titled, adminIds } from "@/lib/notify";
@@ -45,6 +47,8 @@ export async function createTicket(_: ActionState, form: FormData): Promise<Acti
       title: `New ${category.name} ticket`,
       body: `${user.name}: ${titled(ticket.id, ticket.subject)}`,
     });
+    // Relay AI triages after the response, so the customer never waits on it.
+    after(() => triageTicket(ticket.id));
     revalidatePath("/", "layout");
     redirect(`/tickets/${ticket.id}?created=1`);
   });
@@ -139,6 +143,7 @@ export async function assignAgent(ticketId: number, _: ActionState, form: FormDa
     await db.insert(ticketEvents).values({ ticketId, actorId: user.id, type: "assigned", toValue: agent.name });
     await notifyUsers([agent.id], { ticketId, title: "Ticket assigned to you", body: titled(ticketId, ticket.subject) });
     await notifyUsers([ticket.customerId], { ticketId, title: `${agent.name} is on your ticket`, body: titled(ticketId, ticket.subject) });
+    if (agent.categoryId) await settleTriage(ticketId, agent.categoryId);
     touch(ticketId);
     return { ok: `Assigned to ${agent.name}` };
   });
@@ -165,5 +170,27 @@ export async function claimTicket(ticketId: number, _: ActionState): Promise<Act
     await notifyUsers([ticket.customerId], { ticketId, title: `${user.name} is on your ticket`, body: titled(ticketId, ticket.subject) });
     touch(ticketId);
     return { ok: "You’ve claimed this ticket" };
+  });
+}
+
+// Admins move a ticket to another category (for example when Relay AI or the customer picked the wrong one).
+export async function setCategory(ticketId: number, _: ActionState, form: FormData): Promise<ActionState> {
+  return runAction(async () => {
+    const user = await actor("admin");
+    const categoryId = Number(form.get("categoryId"));
+    const ticket = await loadTicket(ticketId);
+    if (categoryId === ticket.categoryId) return;
+
+    const cats = await db.select().from(categories);
+    const from = cats.find((c) => c.id === ticket.categoryId);
+    const to = cats.find((c) => c.id === categoryId);
+    if (!to) throw new ActionError("Choose a category");
+
+    await db.update(tickets).set({ categoryId, updatedAt: new Date() }).where(eq(tickets.id, ticketId));
+    await db.insert(ticketEvents).values({ ticketId, actorId: user.id, type: "category", fromValue: from?.name ?? null, toValue: to.name });
+    if (!ticket.agentId) await notifyUsers(await staffFor(categoryId, user.id), { ticketId, title: `Ticket moved to ${to.name}`, body: titled(ticketId, ticket.subject) });
+    await settleTriage(ticketId, categoryId);
+    touch(ticketId);
+    return { ok: `Moved to ${to.name}` };
   });
 }

@@ -6,6 +6,7 @@ import { Icon, SideNav, type NavItem } from "@/components/Nav";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Avatar } from "@/components/ui";
 import { requireUser } from "@/lib/auth";
+import { reviewCount } from "@/lib/ai/queries";
 import { unreadCount } from "@/lib/data";
 import { HOME } from "@/lib/session";
 
@@ -13,13 +14,14 @@ const ROLE_LABEL = { customer: "Customer", agent: "Support agent", admin: "Admin
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const user = await requireUser();
-  const unread = await unreadCount(user.id);
+  const [unread, review] = await Promise.all([unreadCount(user.id), user.role === "admin" ? reviewCount() : Promise.resolve(0)]);
 
   const items: NavItem[] =
     user.role === "admin"
       ? [
           { href: "/dashboard", label: "Dashboard", icon: "dashboard" },
           { href: "/tickets", label: "All tickets", icon: "tickets" },
+          { href: "/triage", label: "Needs review", icon: "ai", badge: review },
           { href: "/categories", label: "Categories", icon: "categories" },
           { href: "/agents", label: "Agents", icon: "agents" },
           { href: "/notifications", label: "Notifications", icon: "notifications", badge: unread },

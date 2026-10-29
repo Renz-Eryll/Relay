@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { and, eq, isNull } from "drizzle-orm";
-import { assignAgent, claimTicket, replyToTicket, setPriority, setStatus } from "@/app/actions/tickets";
+import { assignAgent, claimTicket, replyToTicket, setCategory, setPriority, setStatus } from "@/app/actions/tickets";
+import { TriageCard } from "@/components/ai";
 import { ActionForm, ConfirmButton, SubmitButton } from "@/components/forms";
 import { Avatar, PriorityTag, RelayTrack, StatusBadge } from "@/components/ui";
 import { db } from "@/db";
 import { notifications } from "@/db/schema";
 import { requireUser } from "@/lib/auth";
-import { getTicket, listAgents } from "@/lib/data";
+import { latestTriage } from "@/lib/ai/run-triage";
+import { getTicket, listAgents, listCategories } from "@/lib/data";
 import { dateTimeLabel, timeAgo } from "@/lib/format";
 import { PRIORITIES, PRIORITY, STATUS, ticketRef } from "@/lib/labels";
 import { allowedStatuses, canClaim, canReply, canWork } from "@/lib/permissions";
@@ -42,6 +44,8 @@ export default async function TicketPage({ params, searchParams }: Props) {
 
   const statuses = allowedStatuses(user, ticket);
   const working = canWork(user, ticket);
+  const staff = user.role !== "customer";
+  const [triage, cats] = staff ? await Promise.all([latestTriage(id), listCategories()]) : [null, []];
   const agents = user.role === "admin" ? (await listAgents()).sort((a, b) => Number(b.categoryId === ticket.categoryId) - Number(a.categoryId === ticket.categoryId) || a.name.localeCompare(b.name)) : [];
 
   // One timeline: replies and audit events in order. The "created" event is shown as the opening message.
@@ -158,6 +162,13 @@ export default async function TicketPage({ params, searchParams }: Props) {
         </div>
 
         <aside className="space-y-4 lg:sticky lg:top-20 lg:self-start">
+          {triage && (
+            <TriageCard
+              ticketId={id}
+              isAdmin={user.role === "admin"}
+              triage={{ ...triage, category: cats.find((c) => c.id === triage.categoryId)?.name ?? null }}
+            />
+          )}
           <section className="card divide-y divide-line">
             <dl className="space-y-3 p-4 text-[13px]">
               <div>
@@ -276,6 +287,28 @@ export default async function TicketPage({ params, searchParams }: Props) {
                     </SubmitButton>
                   </div>
                   <p className="text-xs text-faint">{category.name} agents are listed first.</p>
+                </ActionForm>
+              </div>
+            )}
+
+            {user.role === "admin" && (
+              <div className="p-4">
+                <ActionForm action={setCategory.bind(null, id)} className="space-y-2">
+                  <label className="label" htmlFor="categoryId">
+                    Category
+                  </label>
+                  <div className="flex gap-2">
+                    <select id="categoryId" name="categoryId" defaultValue={ticket.categoryId} className="field h-9 text-[13px]">
+                      {cats.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </select>
+                    <SubmitButton className="btn-dark h-9" pending="…">
+                      Move
+                    </SubmitButton>
+                  </div>
                 </ActionForm>
               </div>
             )}

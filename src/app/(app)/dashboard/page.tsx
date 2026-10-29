@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import TicketTable from "@/components/TicketTable";
 import { Avatar, PageHeader, SectionTitle, StatStrip, EmptyNote } from "@/components/ui";
+import { AiChip } from "@/components/ai";
+import { aiEnabled } from "@/lib/ai/provider";
+import { triageStats } from "@/lib/ai/queries";
 import { requireUser } from "@/lib/auth";
 import { avgResolutionMs, categoryBreakdown, listAgents, listTickets, statusCounts } from "@/lib/data";
 import { duration } from "@/lib/format";
@@ -10,13 +13,15 @@ export const metadata: Metadata = { title: "Dashboard" };
 
 export default async function DashboardPage() {
   const user = await requireUser("admin");
-  const [counts, avg, cats, agents, unassigned] = await Promise.all([
+  const [counts, avg, cats, agents, unassigned, ai] = await Promise.all([
     statusCounts(user),
     avgResolutionMs(user),
     categoryBreakdown(),
     listAgents(),
     listTickets(user, { status: "active", scope: "unassigned" }).then((r) => r.rows.slice(0, 6)),
+    triageStats(),
   ]);
+  const share = (n: number) => (ai.total ? `${Math.round((n / ai.total) * 100)}%` : "—");
   const unassignedTotal = cats.reduce((n, c) => n + c.unassigned, 0);
   const maxOpen = Math.max(1, ...cats.map((c) => c.open));
 
@@ -32,6 +37,24 @@ export default async function DashboardPage() {
           { label: "Avg. time to resolve", value: avg ? duration(avg) : "—", hint: "Last 30 days" },
         ]}
       />
+
+      {(aiEnabled() || ai.total > 0) && (
+        <section className="mt-8">
+          <SectionTitle aside={<Link href="/triage" className="text-[13px] font-medium text-brand-ink hover:underline">Needs review</Link>}>
+            <span className="flex items-center gap-2">
+              Triage <AiChip className="normal-case" />
+            </span>
+          </SectionTitle>
+          <StatStrip
+            items={[
+              { label: "Routed automatically", value: share(ai.auto), hint: `${ai.auto} of ${ai.total} new tickets, last 30 days` },
+              { label: "Sent to a person", value: share(ai.review), hint: "Low confidence or AI unavailable", href: "/triage" },
+              { label: "Corrected after auto", value: ai.overrideRate === null ? "—" : `${Math.round(ai.overrideRate * 100)}%`, hint: "Auto-routed tickets staff moved" },
+              { label: "Time to triage", value: ai.latencyMs === null ? "—" : `${(ai.latencyMs / 1000).toFixed(1)}s`, hint: "Average, after the ticket is saved" },
+            ]}
+          />
+        </section>
+      )}
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_20rem]">
         <section className="min-w-0">
