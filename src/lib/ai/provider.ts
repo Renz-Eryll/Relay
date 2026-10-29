@@ -6,7 +6,9 @@ export const EMBEDDING_MODEL = "gemini-embedding-001";
 export const EMBEDDING_DIMENSIONS = 768;
 
 // Pinned (not "-latest") so eval numbers stay reproducible. Override with AI_MODEL.
-export const modelId = () => process.env.AI_MODEL || "gemini-3.5-flash";
+// Flash-Lite: on the free tier, gemini-3.5-flash allows only about 20 requests a day, too few for a public
+// demo; Flash-Lite ran the whole eval without hitting the quota, at about 1s per ticket (evals/triage).
+export const modelId = () => process.env.AI_MODEL || "gemini-3.5-flash-lite";
 
 // GEMINI_API_KEY is the name Google uses; the AI SDK's default name works too.
 const apiKey = () => process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY;

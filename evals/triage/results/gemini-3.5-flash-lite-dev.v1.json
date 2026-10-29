@@ -1,0 +1,322 @@
+[
+  {
+    "id": "pos-05",
+    "category": "pos",
+    "priority": "low",
+    "confidence": 0.95,
+    "reason": "The customer is asking for instructions on how to configure a promotional discount in the cashier system.",
+    "latencyMs": 1920
+  },
+  {
+    "id": "pos-12",
+    "category": "pos",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "The customer display connected to the point-of-sale terminal is showing garbled text.",
+    "latencyMs": 1317
+  },
+  {
+    "id": "pos-16",
+    "category": "pos",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "The point-of-sale terminal does not support split payments between cash and digital wallets.",
+    "latencyMs": 1115
+  },
+  {
+    "id": "pos-17",
+    "category": "pos",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "The taxpayer identification number on receipt footers needs updating in the terminal settings.",
+    "latencyMs": 1392
+  },
+  {
+    "id": "pos-18",
+    "category": "pos",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Slow transaction processing during peak hours is blocking customer checkout operations.",
+    "latencyMs": 3495
+  },
+  {
+    "id": "pos-24",
+    "category": "pos",
+    "priority": "low",
+    "confidence": 0.95,
+    "reason": "The customer is asking a feature question about training cashiers on the POS system.",
+    "latencyMs": 1485
+  },
+  {
+    "id": "inventory-02",
+    "category": "inventory",
+    "priority": "low",
+    "confidence": 1,
+    "reason": "The customer is asking a configuration question about stock reorder alerts.",
+    "latencyMs": 3602
+  },
+  {
+    "id": "inventory-03",
+    "category": "inventory",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "Stock transfer status is not updating properly between branches.",
+    "latencyMs": 1430
+  },
+  {
+    "id": "inventory-10",
+    "category": "inventory",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Stock quantities are failing to update after sales transactions occur.",
+    "latencyMs": 1381
+  },
+  {
+    "id": "inventory-13",
+    "category": "inventory",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "Bulk item upload failure stops new stock from being added to the system.",
+    "latencyMs": 1892
+  },
+  {
+    "id": "inventory-17",
+    "category": "inventory",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "Stock levels fail to update following a supplier return transaction.",
+    "latencyMs": 2643
+  },
+  {
+    "id": "inventory-19",
+    "category": "inventory",
+    "priority": "low",
+    "confidence": 0.95,
+    "reason": "The customer is asking a feature question about tracking lot numbers in the inventory system.",
+    "latencyMs": 1307
+  },
+  {
+    "id": "inventory-21",
+    "category": "inventory",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Stock transfers failing to arrive and showing zero cost affects inventory tracking across branches.",
+    "latencyMs": 1548
+  },
+  {
+    "id": "inventory-24",
+    "category": "inventory",
+    "priority": "low",
+    "confidence": 0.95,
+    "reason": "The customer is asking how to correct an incorrectly encoded expiration date in a delivery record.",
+    "latencyMs": 1261
+  },
+  {
+    "id": "accounting-04",
+    "category": "accounting",
+    "priority": "low",
+    "confidence": 0.95,
+    "reason": "The user is asking how to generate and print BIR tax withholding certificates.",
+    "latencyMs": 4056
+  },
+  {
+    "id": "accounting-05",
+    "category": "accounting",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Incorrect tax computation on sales invoices impacts financial records and client billing.",
+    "latencyMs": 867
+  },
+  {
+    "id": "accounting-07",
+    "category": "accounting",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "The system glitch is generating duplicate ledger entries from POS sales.",
+    "latencyMs": 2851
+  },
+  {
+    "id": "accounting-10",
+    "category": "accounting",
+    "priority": "medium",
+    "confidence": 0.85,
+    "reason": "Expense claims awaiting approval are not processing correctly in the financial records module.",
+    "latencyMs": 1187
+  },
+  {
+    "id": "accounting-11",
+    "category": "accounting",
+    "priority": "low",
+    "confidence": 0.95,
+    "reason": "The customer is asking for instructions on how to export an income statement.",
+    "latencyMs": 1484
+  },
+  {
+    "id": "accounting-15",
+    "category": "accounting",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "Duplicate depreciation entries require correction in the general ledger.",
+    "latencyMs": 1265
+  },
+  {
+    "id": "accounting-16",
+    "category": "accounting",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "Financial reports not matching bank records indicates an accounting discrepancy.",
+    "latencyMs": 1385
+  },
+  {
+    "id": "accounting-20",
+    "category": "accounting",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Supplier withholding tax calculations are failing during payment processing.",
+    "latencyMs": 1007
+  },
+  {
+    "id": "billing-02",
+    "category": "accounting",
+    "priority": "low",
+    "confidence": 0.9,
+    "reason": "The customer is asking a configuration question about changing their billing cycle date.",
+    "latencyMs": 1469
+  },
+  {
+    "id": "billing-03",
+    "category": "billing",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Meter reading upload failures block the core billing workflow.",
+    "latencyMs": 925
+  },
+  {
+    "id": "billing-06",
+    "category": "billing",
+    "priority": "high",
+    "confidence": 0.9,
+    "reason": "GCash payments are not posting to customer billing accounts, causing widespread customer complaints.",
+    "latencyMs": 1271
+  },
+  {
+    "id": "billing-10",
+    "category": "billing",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Meter replacement sequence is causing incorrect calculations on utility bills.",
+    "latencyMs": 1608
+  },
+  {
+    "id": "billing-12",
+    "category": "billing",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "The batch printing failure prevents sending out customer statements, blocking daily operations.",
+    "latencyMs": 1542
+  },
+  {
+    "id": "billing-16",
+    "category": "accounting",
+    "priority": "high",
+    "confidence": 0.9,
+    "reason": "Bank payment file upload failure blocks reconciliation and payment posting.",
+    "latencyMs": 1427
+  },
+  {
+    "id": "billing-17",
+    "category": "billing",
+    "priority": "medium",
+    "confidence": 0.9,
+    "reason": "Utility bills are sending duplicate text reminders to customers.",
+    "latencyMs": 1090
+  },
+  {
+    "id": "billing-22",
+    "category": "accounting",
+    "priority": "high",
+    "confidence": 0.9,
+    "reason": "Missing collection reports affect financial tracking and reconciliation.",
+    "latencyMs": 1341
+  },
+  {
+    "id": "payroll-01",
+    "category": "payroll",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Overtime calculation for night shift staff is missing ahead of Friday payroll release.",
+    "latencyMs": 2978
+  },
+  {
+    "id": "payroll-02",
+    "category": "payroll",
+    "priority": "low",
+    "confidence": 0.95,
+    "reason": "The customer is asking a how-to question regarding employee leave applications.",
+    "latencyMs": 1130
+  },
+  {
+    "id": "payroll-06",
+    "category": "payroll",
+    "priority": "urgent",
+    "confidence": 1,
+    "reason": "Generated payslips are downloading as blank files for all employees, halting payroll distribution.",
+    "latencyMs": 1496
+  },
+  {
+    "id": "payroll-07",
+    "category": "payroll",
+    "priority": "urgent",
+    "confidence": 1,
+    "reason": "Payroll computation error blocks salary release due today.",
+    "latencyMs": 905
+  },
+  {
+    "id": "payroll-09",
+    "category": "payroll",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "An employee loan deduction is still active after being fully paid off.",
+    "latencyMs": 980
+  },
+  {
+    "id": "payroll-14",
+    "category": "payroll",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Holiday pay was missed for staff who worked on November 1, affecting their current compensation.",
+    "latencyMs": 879
+  },
+  {
+    "id": "payroll-16",
+    "category": "payroll",
+    "priority": "low",
+    "confidence": 0.95,
+    "reason": "The customer is asking for a new feature related to employee salary loans and deductions.",
+    "latencyMs": 1864
+  },
+  {
+    "id": "payroll-17",
+    "category": "payroll",
+    "priority": "urgent",
+    "confidence": 0.95,
+    "reason": "Employees are reporting incorrect salaries for the current cutoff, halting normal operations.",
+    "latencyMs": 887
+  },
+  {
+    "id": "payroll-21",
+    "category": "payroll",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Government contribution file export failure blocks payroll compliance work.",
+    "latencyMs": 1048
+  },
+  {
+    "id": "payroll-24",
+    "category": "payroll",
+    "priority": "low",
+    "confidence": 0.9,
+    "reason": "This is a feature question about calculating sales commissions within the payroll module.",
+    "latencyMs": 913
+  }
+]
