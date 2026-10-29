@@ -14,6 +14,14 @@ export const PRIORITY: Record<Priority, { label: string; tone: string; rank: num
   urgent: { label: "Urgent", tone: "text-danger", rank: 3 },
 };
 
+// What each priority means. Shown on the new-ticket form and given to Relay AI as its rubric.
+export const PRIORITY_HINT: Record<Priority, string> = {
+  low: "Question or small request",
+  medium: "Something isn’t working right",
+  high: "Blocking part of our work",
+  urgent: "We can’t operate",
+};
+
 export const STATUSES = Object.keys(STATUS) as Status[];
 export const PRIORITIES = Object.keys(PRIORITY) as Priority[];
 

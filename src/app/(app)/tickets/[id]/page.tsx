@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 type EventLike = { fromValue: string | null; toValue: string | null };
-const EVENT_TEXT: Record<"created" | "status" | "priority" | "assigned" | "unassigned", (e: EventLike) => string> = {
+const EVENT_TEXT: Record<"created" | "status" | "priority" | "assigned" | "unassigned" | "category", (e: EventLike) => string> = {
   created: () => "opened the ticket",
   status: (e) =>
     `changed status to ${STATUS[e.toValue as keyof typeof STATUS]?.label.toLowerCase() ?? e.toValue}`,
@@ -26,6 +26,7 @@ const EVENT_TEXT: Record<"created" | "status" | "priority" | "assigned" | "unass
     `set priority to ${PRIORITY[e.toValue as keyof typeof PRIORITY]?.label.toLowerCase() ?? e.toValue}`,
   assigned: (e) => `assigned the ticket to ${e.toValue}`,
   unassigned: () => "unassigned the ticket",
+  category: (e) => `moved the ticket from ${e.fromValue} to ${e.toValue}`,
 };
 
 const ROLE_TAG = { customer: null, agent: "Agent", admin: "Admin" } as const;
@@ -120,10 +121,10 @@ export default async function TicketPage({ params, searchParams }: Props) {
                 <li key={`e${item.e.id}`} className="relative flex items-center gap-4 text-[12px] text-muted">
                   {/* Handoff node on the thread. */}
                   <span className="relative z-10 grid size-8 shrink-0 place-items-center" aria-hidden>
-                    <span className="size-2.5 rotate-45 border border-brand bg-paper" />
+                    <span className={`size-2.5 rotate-45 border border-brand ${item.e.byAi ? "bg-brand" : "bg-paper"}`} />
                   </span>
                   <span className="min-w-0">
-                    <span className="font-medium text-ink">{item.e.actorName ?? "Someone"}</span> {item.e.type === "assigned" && item.e.toValue === item.e.actorName ? "claimed the ticket" : EVENT_TEXT[item.e.type](item.e)}
+                    <span className="font-medium text-ink">{item.e.byAi ? "Relay AI" : (item.e.actorName ?? "Someone")}</span> {item.e.type === "assigned" && item.e.toValue === item.e.actorName ? "claimed the ticket" : EVENT_TEXT[item.e.type](item.e)}
                     <span className="num text-faint"> · {timeAgo(item.e.createdAt)}</span>
                   </span>
                 </li>

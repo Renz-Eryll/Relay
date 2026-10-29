@@ -9,11 +9,15 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "db:setup": "tsx src/db/setup.ts",
     "db:push": "drizzle-kit push",
     "db:seed": "tsx src/db/seed.ts"
   },
   "dependencies": {
+    "@ai-sdk/google": "^4.0.107",
     "@neondatabase/serverless": "^1.2.0",
+    "ai": "^7.0.155",
     "bcryptjs": "^3.0.3",
     "drizzle-orm": "^0.45.4",
     "jose": "^6.2.13",
@@ -37,7 +41,8 @@
     "eslint-config-next": "^15.5.28",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.15",
-    "typescript": "~5.9"
+    "typescript": "~5.9",
+    "vitest": "^5.0.5"
   },
   "overrides": {
     "postcss": "^8.5.31"

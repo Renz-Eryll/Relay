@@ -9,6 +9,7 @@ const SECTIONS = [
   ["Using Relay", "Relay is a demonstration support desk. Use it to raise and track support requests. Don’t submit sensitive personal, financial or health information."],
   ["Your account", "Keep your password private. You’re responsible for activity on your account. You can update your details or reset your password at any time."],
   ["Your data", "Tickets, replies and your profile are stored to provide the service. Agents and admins can read tickets you raise so they can help you."],
+  ["Relay AI", "Ticket subjects, descriptions and replies are sent to Google’s Gemini API to suggest a category and priority, draft replies for agents and summarise threads. The demo uses Gemini’s free tier, where Google may use this text to improve its products, so don’t enter anything private. Agents always review AI drafts before anything is sent."],
   ["Demo workspace", "The shared demo accounts and their data are reset every day. Anything entered with a demo account may be seen by other visitors and is deleted at the next reset."],
   ["Changes", "These terms may change as the project evolves. Continued use means you accept the current version."],
 ];

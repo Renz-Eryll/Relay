@@ -4,11 +4,9 @@ import { ActionForm, SubmitButton } from "@/components/forms";
 import { PageHeader } from "@/components/ui";
 import { requireUser } from "@/lib/auth";
 import { listCategories } from "@/lib/data";
-import { PRIORITIES, PRIORITY } from "@/lib/labels";
+import { PRIORITIES, PRIORITY, PRIORITY_HINT } from "@/lib/labels";
 
 export const metadata: Metadata = { title: "New ticket" };
-
-const PRIORITY_HINT = { low: "Question or small request", medium: "Something isn’t working right", high: "Blocking part of our work", urgent: "We can’t operate" } as const;
 
 export default async function NewTicketPage({ searchParams }: { searchParams: Promise<{ welcome?: string }> }) {
   await requireUser("customer");
