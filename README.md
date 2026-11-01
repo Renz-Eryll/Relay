@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./docs/relay-banner.png" alt="Relay: every ticket, one thread" width="800"/>
+  <img src="./docs/relay-banner.png" alt="Relay: an AI support desk. Every ticket, one thread." width="800"/>
 </p>
 
 ##
@@ -27,16 +27,12 @@
 
 ## ✨ Features
 
-- 🙋 **Customers**: raise a ticket in one of five categories with a priority, follow status and replies in one thread, close it or reopen it if the problem comes back
-- 🎧 **Agents**: a queue for their category with tickets assigned to them plus unassigned ones they can claim; reply, set priority and move tickets through open → in progress → resolved → closed
-- 🛠️ **Admins**: dashboard of open, in-progress and unassigned work, average resolution time and load per agent; assign tickets (agents in the ticket's category are suggested first), manage categories and agents
-- 🔔 **Notifications** for new tickets, replies, assignments and status changes
-- 🧾 **Audit trail** on every ticket: who changed the status, priority or assignee, and when
-- 🔑 **Password reset** with a 6-digit email code (10-minute expiry, 5 attempts, 3 codes per hour)
-- 🔍 **Search** by subject, customer or `#number`; filters live in the URL so views can be shared
-- 🌗 **Dark and light themes**, with a slide-in menu on phones
-- 🧪 **Demo mode**: shared customer, agent and admin accounts, reset by a daily cron
-- 🤖 **Relay AI**: auto-triage, reply drafts and handoff summaries (below)
+- 🎫 **Three roles, one thread**: customers raise and follow tickets, agents work their category's queue, admins assign work and manage the team
+- 🤖 **Relay AI**: auto-triage with a human review queue, reply drafts from similar resolved tickets, and handoff summaries ([how it works](#-relay-ai))
+- 🧾 **Audit trail and notifications** for every status, priority, assignment and category change
+- 🔍 **Search and filters** by subject, customer or `#number`, kept in the URL so views can be shared
+- 🌗 **Dark and light themes**, responsive down to phones
+- 🧪 **Live demo** with shared customer, agent and admin accounts, reset daily
 
 ---
 
@@ -93,6 +89,7 @@ npm run eval:triage -- --test --confirm-test # held-out test split, run once
 - Every server action checks the signed-in user and their role; ticket access goes through one permissions module
 - Tickets you can't see return 404, the same as tickets that don't exist
 - bcrypt password hashing, signed `httpOnly` session cookies, hashed reset codes compared in constant time
+- Password reset with hashed 6-digit email codes: 10-minute expiry, 5 attempts, 3 codes per hour
 - Sign-in and reset responses don't reveal which emails have accounts
 - Shared demo accounts can't change their email or password, and demo agents can't be removed
 
