@@ -1,5 +1,5 @@
 import type { Priority, TriageOutcome } from "@/db/schema";
-import { acceptTriage, dismissTriage } from "@/app/actions/ai";
+import { acceptTriage, dismissTriage, summarizeTicket } from "@/app/actions/ai";
 import { ConfirmButton } from "./forms";
 import { Icon } from "./Nav";
 import { PriorityTag } from "./ui";
@@ -79,6 +79,43 @@ export function TriageCard({ ticketId, triage, isAdmin }: { ticketId: number; tr
             Dismiss
           </ConfirmButton>
         </div>
+      )}
+    </section>
+  );
+}
+
+type CatchUp = { lines: { label: string; text: string }[]; createdAt: Date; newMessages: number } | null;
+
+// Top of the thread, staff only: Relay AI's three-line catch-up for whoever picks the ticket up.
+export function CatchUpCard({ ticketId, summary, messageCount }: { ticketId: number; summary: CatchUp; messageCount: number }) {
+  if (!summary && messageCount === 0) return null;
+  return (
+    <section className="card mb-5 border-l-2 border-l-brand p-4 sm:ml-12">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="flex items-center gap-2 text-[13px] font-semibold">
+          Catch-up <AiChip className="normal-case" />
+        </p>
+        <ConfirmButton action={summarizeTicket.bind(null, ticketId)} className="btn-ghost h-7 px-2 text-[12px]">
+          {summary ? "Refresh" : "Summarize conversation"}
+        </ConfirmButton>
+      </div>
+      {summary ? (
+        <>
+          <dl className="mt-3 space-y-1.5 text-[13px]">
+            {summary.lines.map((l) => (
+              <div key={l.label} className="grid gap-x-3 sm:grid-cols-[4.5rem_1fr]">
+                <dt className="eyebrow pt-0.5">{l.label}</dt>
+                <dd>{l.text}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="mt-3 text-[11px] text-faint">
+            {summary.newMessages > 0 ? `${summary.newMessages} new ${summary.newMessages === 1 ? "message" : "messages"} since this summary. ` : ""}
+            Written by Relay AI from the conversation; check the thread for details.
+          </p>
+        </>
+      ) : (
+        <p className="mt-2 text-[12px] text-muted">Taking over this ticket? Relay AI can sum up the conversation so far in three lines.</p>
       )}
     </section>
   );

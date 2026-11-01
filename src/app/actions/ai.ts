@@ -8,9 +8,10 @@ import { generateDraft } from "@/lib/ai/draft";
 import { AiUnavailableError, logged } from "@/lib/ai/logged";
 import { modelId } from "@/lib/ai/provider";
 import { findSimilarResolved } from "@/lib/ai/similar";
+import { summarizeThread } from "@/lib/ai/run-summary";
 import { applyTriage, latestTriage, setTriageOutcome } from "@/lib/ai/run-triage";
 import { ActionError, actor, runAction, type ActionState } from "@/lib/auth";
-import { canReply } from "@/lib/permissions";
+import { canReply, canView } from "@/lib/permissions";
 
 const touch = (ticketId: number) => {
   revalidatePath(`/tickets/${ticketId}`);
@@ -87,4 +88,23 @@ export async function draftReply(ticketId: number): Promise<DraftResult> {
     console.error(`Draft failed for ticket ${ticketId}`, error);
     return { error: "Relay AI couldn’t draft a reply right now. Try again in a minute." };
   }
+}
+
+// Staff: summarise the conversation so far (or refresh an out-of-date summary).
+export async function summarizeTicket(ticketId: number, _: ActionState): Promise<ActionState> {
+  return runAction(async () => {
+    const user = await actor("agent", "admin");
+    const [ticket] = await db.select().from(tickets).where(eq(tickets.id, ticketId));
+    if (!ticket || !canView(user, ticket)) throw new ActionError("You can’t view this ticket.");
+    try {
+      const row = await summarizeThread(ticketId, user.id);
+      if (!row) throw new ActionError("There’s no conversation to summarise yet.");
+    } catch (error) {
+      if (error instanceof ActionError) throw error;
+      if (error instanceof AiUnavailableError) throw new ActionError(error.message);
+      console.error(`Summary failed for ticket ${ticketId}`, error);
+      throw new ActionError("Relay AI couldn’t summarise this ticket right now. Try again in a minute.");
+    }
+    touch(ticketId);
+  });
 }
