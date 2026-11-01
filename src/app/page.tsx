@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import DemoButtons from "@/components/DemoButtons";
 import Logo from "@/components/Logo";
 import ThemeToggle from "@/components/ThemeToggle";
+import { AiChip, Confidence } from "@/components/ai";
 import { Avatar, PriorityTag, RelayTrack, StatusBadge } from "@/components/ui";
 import type { Status } from "@/db/schema";
 import { currentUser } from "@/lib/auth";
@@ -53,6 +54,9 @@ export default async function LandingPage() {
         <nav className="flex items-center gap-1 sm:gap-2">
           <a href="#relay" className="btn-ghost hidden md:inline-flex">
             How it works
+          </a>
+          <a href="#ai" className="btn-ghost hidden md:inline-flex">
+            Relay AI
           </a>
           <a href="#roles" className="btn-ghost hidden md:inline-flex">
             Roles
@@ -159,6 +163,64 @@ export default async function LandingPage() {
               </li>
             ))}
           </ol>
+        </div>
+      </section>
+
+      {/* Relay AI */}
+      <section id="ai" className="mx-auto max-w-6xl scroll-mt-6 px-6 pt-20">
+        <AiChip />
+        <h2 className="display mt-3 max-w-2xl text-[30px] leading-tight sm:text-[36px]">AI does the sorting. People make the calls.</h2>
+        <p className="mt-3 max-w-2xl text-muted">
+          Relay AI reads every new ticket, drafts replies from tickets that were already solved, and catches agents up when a ticket changes hands. Anything it isn’t sure about goes to a person.
+        </p>
+        <div className="mt-10 grid gap-4 lg:grid-cols-3">
+          <article className="card flex flex-col p-5">
+            <h3 className="font-semibold">Auto-triage</h3>
+            <p className="mt-1 text-[13px] text-muted">Category, priority and the least-busy agent, a second after the ticket is saved.</p>
+            <div className="perf mt-5 space-y-2.5 rounded-[6px] border p-3.5 text-[12px]">
+              <p className="text-muted">
+                <span className="font-medium text-ink">Relay AI</span> moved the ticket from POS &amp; Retail to <span className="font-medium text-ink">Utility Billing</span>
+              </p>
+              <div className="flex flex-wrap items-center gap-3">
+                <PriorityTag priority="high" />
+                <Confidence value={0.95} />
+              </div>
+              <p className="text-muted">
+                Assigned to <span className="font-medium text-ink">Bea Villanueva</span>
+              </p>
+            </div>
+            <p className="mt-auto pt-4 text-[12px] text-faint">Under 90% confident? It waits in an admin review queue instead.</p>
+          </article>
+
+          <article className="card flex flex-col p-5">
+            <h3 className="font-semibold">Reply drafts</h3>
+            <p className="mt-1 text-[13px] text-muted">A first draft built from how similar tickets were resolved, found with vector search.</p>
+            <div className="perf mt-5 space-y-2.5 rounded-[6px] border p-3.5 text-[12px]">
+              <p className="rounded-[4px] bg-sunken p-2.5 text-ink">Please update your printer driver from Settings → Devices, and tell me if it’s connected by USB or LAN.</p>
+              <p className="text-muted">
+                Based on <span className="num text-brand-ink">#0189</span> Receipt printer stops after every 5 transactions <span className="num text-faint">· 92% similar</span>
+              </p>
+            </div>
+            <p className="mt-auto pt-4 text-[12px] text-faint">Never sent on its own: the agent edits and sends it.</p>
+          </article>
+
+          <article className="card flex flex-col p-5">
+            <h3 className="font-semibold">Handoff catch-up</h3>
+            <p className="mt-1 text-[13px] text-muted">When a ticket changes hands, the new agent gets the story in three lines.</p>
+            <dl className="perf mt-5 space-y-1.5 rounded-[6px] border p-3.5 text-[12px]">
+              {[
+                ["Problem", "Staff get an error opening payslips on the portal."],
+                ["Tried", "Profile linked to a portal account."],
+                ["Next", "Confirm the employee can open it now."],
+              ].map(([label, text]) => (
+                <div key={label} className="grid grid-cols-[3.75rem_1fr] gap-2">
+                  <dt className="eyebrow pt-0.5">{label}</dt>
+                  <dd>{text}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-auto pt-4 text-[12px] text-faint">Staff can refresh it whenever new messages arrive.</p>
+          </article>
         </div>
       </section>
 
