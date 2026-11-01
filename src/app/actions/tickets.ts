@@ -9,6 +9,7 @@ import { db } from "@/db";
 import { categories, messages, ticketEvents, tickets, users, type Priority, type Status } from "@/db/schema";
 import { settleTriage, triageTicket } from "@/lib/ai/run-triage";
 import { embedTicket } from "@/lib/ai/similar";
+import { summarizeThread } from "@/lib/ai/run-summary";
 import { ActionError, actor, runAction, type ActionState } from "@/lib/auth";
 import { PRIORITIES, PRIORITY, STATUS, STATUSES } from "@/lib/labels";
 import { notifyUsers, staffFor, titled, adminIds } from "@/lib/notify";
@@ -19,6 +20,9 @@ async function loadTicket(id: number) {
   if (!ticket) throw new ActionError("Ticket not found");
   return ticket;
 }
+
+// A handoff summary for whoever just took the ticket (skipped when there's no conversation yet).
+const catchUp = (id: number) => summarizeThread(id).catch((e) => console.error(`Summary failed for ticket ${id}`, e));
 
 const touch = (id: number) => {
   revalidatePath(`/tickets/${id}`);
@@ -148,6 +152,7 @@ export async function assignAgent(ticketId: number, _: ActionState, form: FormDa
     await notifyUsers([agent.id], { ticketId, title: "Ticket assigned to you", body: titled(ticketId, ticket.subject) });
     await notifyUsers([ticket.customerId], { ticketId, title: `${agent.name} is on your ticket`, body: titled(ticketId, ticket.subject) });
     if (agent.categoryId) await settleTriage(ticketId, agent.categoryId);
+    after(() => catchUp(ticketId));
     touch(ticketId);
     return { ok: `Assigned to ${agent.name}` };
   });
@@ -172,6 +177,7 @@ export async function claimTicket(ticketId: number, _: ActionState): Promise<Act
       ...(ticket.status === "open" ? [{ ticketId, actorId: user.id, type: "status" as const, fromValue: "open", toValue: "in_progress" }] : []),
     ]);
     await notifyUsers([ticket.customerId], { ticketId, title: `${user.name} is on your ticket`, body: titled(ticketId, ticket.subject) });
+    after(() => catchUp(ticketId));
     touch(ticketId);
     return { ok: "You’ve claimed this ticket" };
   });

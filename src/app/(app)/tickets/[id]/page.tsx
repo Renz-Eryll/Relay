@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { and, eq, isNull } from "drizzle-orm";
 import { assignAgent, claimTicket, replyToTicket, setCategory, setPriority, setStatus } from "@/app/actions/tickets";
-import { TriageCard } from "@/components/ai";
+import { CatchUpCard, TriageCard } from "@/components/ai";
 import { ReplyBox } from "@/components/ReplyBox";
 import { ActionForm, ConfirmButton, SubmitButton } from "@/components/forms";
 import { Avatar, PriorityTag, RelayTrack, StatusBadge } from "@/components/ui";
@@ -10,6 +10,7 @@ import { notifications } from "@/db/schema";
 import { requireUser } from "@/lib/auth";
 import { aiEnabled } from "@/lib/ai/provider";
 import { latestTriage } from "@/lib/ai/run-triage";
+import { latestSummary } from "@/lib/ai/run-summary";
 import { getTicket, listAgents, listCategories } from "@/lib/data";
 import { dateTimeLabel, timeAgo } from "@/lib/format";
 import { PRIORITIES, PRIORITY, STATUS, ticketRef } from "@/lib/labels";
@@ -47,7 +48,7 @@ export default async function TicketPage({ params, searchParams }: Props) {
   const statuses = allowedStatuses(user, ticket);
   const working = canWork(user, ticket);
   const staff = user.role !== "customer";
-  const [triage, cats] = staff ? await Promise.all([latestTriage(id), listCategories()]) : [null, []];
+  const [triage, cats, summary] = staff ? await Promise.all([latestTriage(id), listCategories(), latestSummary(id)]) : [null, [], null];
   const agents = user.role === "admin" ? (await listAgents()).sort((a, b) => Number(b.categoryId === ticket.categoryId) - Number(a.categoryId === ticket.categoryId) || a.name.localeCompare(b.name)) : [];
 
   // One timeline: replies and audit events in order. The "created" event is shown as the opening message.
@@ -89,6 +90,8 @@ export default async function TicketPage({ params, searchParams }: Props) {
 
       <div className="grid gap-6 lg:grid-cols-[1fr_18rem]">
         <div className="min-w-0">
+          {staff && aiEnabled() && <CatchUpCard ticketId={id} summary={summary} messageCount={thread.length} />}
+
           {/* The thread: one line joins the opening message, every reply and every handoff. */}
           <ol className="relative space-y-4 before:absolute before:top-4 before:bottom-4 before:left-[15px] before:w-px before:bg-line-strong">
             <li className="relative flex gap-4">
