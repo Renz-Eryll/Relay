@@ -1,0 +1,642 @@
+[
+  {
+    "id": "pos-01",
+    "category": "pos",
+    "priority": "urgent",
+    "confidence": 0.95,
+    "reason": "Card payment terminals are failing across all registers, halting checkout operations.",
+    "latencyMs": 1164
+  },
+  {
+    "id": "pos-02",
+    "category": "pos",
+    "priority": "low",
+    "confidence": 0.95,
+    "reason": "The customer is asking for instructions on how to void a receipt line item in the POS system.",
+    "latencyMs": 901
+  },
+  {
+    "id": "pos-03",
+    "category": "pos",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "The receipt printer at counter 2 is failing to print despite a restart, blocking checkout operations.",
+    "latencyMs": 1092
+  },
+  {
+    "id": "pos-04",
+    "category": "pos",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Tax computation error during cashier checkout affects statutory discounts.",
+    "latencyMs": 992
+  },
+  {
+    "id": "pos-06",
+    "category": "pos",
+    "priority": "urgent",
+    "confidence": 1,
+    "reason": "All cashiers across all branches are completely unable to log into the POS to process sales.",
+    "latencyMs": 1093
+  },
+  {
+    "id": "pos-07",
+    "category": "pos",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Discrepancy between cash drawer count and shift report affects daily POS reconciliation.",
+    "latencyMs": 1090
+  },
+  {
+    "id": "pos-08",
+    "category": "pos",
+    "priority": "low",
+    "confidence": 0.95,
+    "reason": "The customer is asking how to reprint an official receipt from the cash register.",
+    "latencyMs": 1063
+  },
+  {
+    "id": "pos-09",
+    "category": "pos",
+    "priority": "high",
+    "confidence": 0.9,
+    "reason": "The point-of-sale system at the counter is malfunctioning, blocking store operations.",
+    "latencyMs": 1205
+  },
+  {
+    "id": "pos-10",
+    "category": "pos",
+    "priority": "low",
+    "confidence": 0.95,
+    "reason": "Requesting a new cashier login account for a holiday part-timer.",
+    "latencyMs": 957
+  },
+  {
+    "id": "pos-11",
+    "category": "pos",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "The POS system is failing to apply updated item prices at the checkout scanner, blocking normal sales operations.",
+    "latencyMs": 1015
+  },
+  {
+    "id": "pos-13",
+    "category": "pos",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Offline POS transactions failed to sync to central reports after reconnection, blocking sales visibility.",
+    "latencyMs": 1096
+  },
+  {
+    "id": "pos-14",
+    "category": "pos",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "Loyalty points processing issues occur at checkout during purchases.",
+    "latencyMs": 1061
+  },
+  {
+    "id": "pos-15",
+    "category": "pos",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "The POS system is displaying an incorrect gift card balance during a transaction.",
+    "latencyMs": 810
+  },
+  {
+    "id": "pos-19",
+    "category": "pos",
+    "priority": "low",
+    "confidence": 0.95,
+    "reason": "The customer is asking a feature question regarding printed receipts at the point of sale.",
+    "latencyMs": 745
+  },
+  {
+    "id": "pos-20",
+    "category": "pos",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "The supervisor cannot process refunds because the action button is disabled at the register.",
+    "latencyMs": 1005
+  },
+  {
+    "id": "pos-21",
+    "category": "pos",
+    "priority": "high",
+    "confidence": 1,
+    "reason": "Hardware failure on register 1 blocking checkout operations.",
+    "latencyMs": 1214
+  },
+  {
+    "id": "pos-22",
+    "category": "pos",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "QR payments failing to register at the counter blocks checkout operations.",
+    "latencyMs": 1026
+  },
+  {
+    "id": "pos-23",
+    "category": "pos",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "A double card charge during a counter transaction blocks customer checkout and requires immediate POS terminal or payment gateway review.",
+    "latencyMs": 1002
+  },
+  {
+    "id": "inventory-01",
+    "category": "inventory",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Negative stock levels after receiving indicate a data sync or calculation error in inventory management.",
+    "latencyMs": 962
+  },
+  {
+    "id": "inventory-04",
+    "category": "inventory",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "Duplicate receiving log entry causing incorrect stock levels.",
+    "latencyMs": 935
+  },
+  {
+    "id": "inventory-05",
+    "category": "inventory",
+    "priority": "low",
+    "confidence": 0.95,
+    "reason": "The customer is asking for a new feature to track item expiry dates.",
+    "latencyMs": 940
+  },
+  {
+    "id": "inventory-06",
+    "category": "inventory",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "Discrepancy found between system stock levels and physical warehouse count.",
+    "latencyMs": 934
+  },
+  {
+    "id": "inventory-07",
+    "category": "inventory",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "The system prevents adding a new item due to a duplicate SKU error even though the item does not appear in searches.",
+    "latencyMs": 880
+  },
+  {
+    "id": "inventory-08",
+    "category": "inventory",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Price synchronization from the item master to branch locations is failing.",
+    "latencyMs": 1048
+  },
+  {
+    "id": "inventory-09",
+    "category": "inventory",
+    "priority": "urgent",
+    "confidence": 0.95,
+    "reason": "App crashes during receiving prevent stock processing at the dock, halting operations.",
+    "latencyMs": 776
+  },
+  {
+    "id": "inventory-11",
+    "category": "inventory",
+    "priority": "low",
+    "confidence": 0.95,
+    "reason": "The customer is asking how to generate a stock movement report for auditing purposes.",
+    "latencyMs": 873
+  },
+  {
+    "id": "inventory-12",
+    "category": "inventory",
+    "priority": "medium",
+    "confidence": 0.85,
+    "reason": "Warehouse stock levels are showing discrepancies similar to the previous month.",
+    "latencyMs": 993
+  },
+  {
+    "id": "inventory-14",
+    "category": "inventory",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "The unit conversion ratio for receiving items into stock is incorrectly configured.",
+    "latencyMs": 855
+  },
+  {
+    "id": "inventory-15",
+    "category": "inventory",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "The inability to convert purchase orders to receiving blocks warehouse stocking operations.",
+    "latencyMs": 955
+  },
+  {
+    "id": "inventory-16",
+    "category": "inventory",
+    "priority": "urgent",
+    "confidence": 0.95,
+    "reason": "Stock levels for all items in Branch 3 dropped to zero, completely halting sales.",
+    "latencyMs": 968
+  },
+  {
+    "id": "inventory-18",
+    "category": "inventory",
+    "priority": "low",
+    "confidence": 0.95,
+    "reason": "The customer is asking to adjust report filters for discontinued items in the inventory system.",
+    "latencyMs": 942
+  },
+  {
+    "id": "inventory-20",
+    "category": "inventory",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "Newly added items are missing from the stock count sheet printout.",
+    "latencyMs": 1041
+  },
+  {
+    "id": "inventory-22",
+    "category": "inventory",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "The locked cycle count is blocking inventory reconciliation work.",
+    "latencyMs": 1002
+  },
+  {
+    "id": "inventory-23",
+    "category": "inventory",
+    "priority": "low",
+    "confidence": 0.9,
+    "reason": "The customer is requesting a feature to track slow-moving stock levels for markdowns.",
+    "latencyMs": 978
+  },
+  {
+    "id": "accounting-01",
+    "category": "accounting",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "An unbalanced trial balance after closing is a critical accounting error blocking financial reporting.",
+    "latencyMs": 859
+  },
+  {
+    "id": "accounting-02",
+    "category": "accounting",
+    "priority": "low",
+    "confidence": 0.95,
+    "reason": "The customer is asking for guidance on recording a journal entry for petty cash.",
+    "latencyMs": 869
+  },
+  {
+    "id": "accounting-03",
+    "category": "accounting",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "The bank feed failure blocks the accounting team from performing weekly reconciliations.",
+    "latencyMs": 1029
+  },
+  {
+    "id": "accounting-06",
+    "category": "payroll",
+    "priority": "urgent",
+    "confidence": 0.95,
+    "reason": "The system fails to generate the BIR 1601-C tax return with the deadline tomorrow, halting statutory compliance.",
+    "latencyMs": 929
+  },
+  {
+    "id": "accounting-08",
+    "category": "accounting",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "Customer accounts are generating invoices with incorrect due dates.",
+    "latencyMs": 978
+  },
+  {
+    "id": "accounting-09",
+    "category": "accounting",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "The month-end closing process is blocked due to an unresolved validation error.",
+    "latencyMs": 850
+  },
+  {
+    "id": "accounting-12",
+    "category": "accounting",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "The accounts receivable aging report is displaying incorrect data for paid invoices.",
+    "latencyMs": 1166
+  },
+  {
+    "id": "accounting-13",
+    "category": "accounting",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "The credit memo failed to update the invoice balance in the accounts receivable ledger.",
+    "latencyMs": 1069
+  },
+  {
+    "id": "accounting-14",
+    "category": "accounting",
+    "priority": "low",
+    "confidence": 0.95,
+    "reason": "User is requesting read-only user permissions for the general ledger.",
+    "latencyMs": 1194
+  },
+  {
+    "id": "accounting-17",
+    "category": "accounting",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "Discrepancy between the balance sheet and stock valuation report requires a ledger reconciliation fix.",
+    "latencyMs": 912
+  },
+  {
+    "id": "accounting-18",
+    "category": "accounting",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Check printing alignment issues affect disbursement and accounting operations.",
+    "latencyMs": 920
+  },
+  {
+    "id": "accounting-19",
+    "category": "accounting",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "The exchange rate failure affects invoice ledger postings and revenue calculations.",
+    "latencyMs": 1298
+  },
+  {
+    "id": "accounting-21",
+    "category": "accounting",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "The user needs account access restored and ledger reconciliation corrected.",
+    "latencyMs": 949
+  },
+  {
+    "id": "accounting-22",
+    "category": "accounting",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "The issue involves a numbering gap in the company's sales invoices.",
+    "latencyMs": 904
+  },
+  {
+    "id": "accounting-23",
+    "category": "accounting",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Payment postings from billing are failing to sync to the general ledger, impacting cash accounts.",
+    "latencyMs": 977
+  },
+  {
+    "id": "accounting-24",
+    "category": "accounting",
+    "priority": "low",
+    "confidence": 1,
+    "reason": "The customer is asking a how-to question about year-end closing processes.",
+    "latencyMs": 1020
+  },
+  {
+    "id": "billing-01",
+    "category": "billing",
+    "priority": "urgent",
+    "confidence": 1,
+    "reason": "An entire zone of utility bills generated with zero consumption prevents revenue collection.",
+    "latencyMs": 978
+  },
+  {
+    "id": "billing-04",
+    "category": "billing",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Payment posting error incorrectly applies late penalties to customers who paid before their due date.",
+    "latencyMs": 988
+  },
+  {
+    "id": "billing-05",
+    "category": "billing",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Water bill generation is omitting senior citizen discounts for qualified accounts.",
+    "latencyMs": 957
+  },
+  {
+    "id": "billing-07",
+    "category": "billing",
+    "priority": "urgent",
+    "confidence": 0.95,
+    "reason": "Paid utility accounts are incorrectly flagged for disconnection ahead of an imminent field crew dispatch.",
+    "latencyMs": 974
+  },
+  {
+    "id": "billing-08",
+    "category": "billing",
+    "priority": "low",
+    "confidence": 0.95,
+    "reason": "The customer is asking for guidance on how to configure a new utility rate.",
+    "latencyMs": 952
+  },
+  {
+    "id": "billing-09",
+    "category": "billing",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Utility bills are generating with an incorrect due date affecting all accounts.",
+    "latencyMs": 970
+  },
+  {
+    "id": "billing-11",
+    "category": "billing",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Customer accounts are displaying outdated balance information on the portal, blocking accurate collections.",
+    "latencyMs": 993
+  },
+  {
+    "id": "billing-13",
+    "category": "billing",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "Reconnection fees are missing from generated utility bills.",
+    "latencyMs": 928
+  },
+  {
+    "id": "billing-14",
+    "category": "billing",
+    "priority": "medium",
+    "confidence": 0.9,
+    "reason": "Customers are complaining about incorrect high bills requiring a review.",
+    "latencyMs": 1273
+  },
+  {
+    "id": "billing-15",
+    "category": "billing",
+    "priority": "low",
+    "confidence": 0.95,
+    "reason": "The customer is asking a how-to question regarding the billing process for defective meters.",
+    "latencyMs": 965
+  },
+  {
+    "id": "billing-18",
+    "category": "billing",
+    "priority": "low",
+    "confidence": 1,
+    "reason": "The customer is asking for the standard procedure to transfer a water utility account ownership.",
+    "latencyMs": 901
+  },
+  {
+    "id": "billing-19",
+    "category": "billing",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "An incorrect meter reading caused an erroneous utility bill that needs correction.",
+    "latencyMs": 791
+  },
+  {
+    "id": "billing-20",
+    "category": "billing",
+    "priority": "urgent",
+    "confidence": 1,
+    "reason": "Utility bill generation fails entirely on billing day, halting core operations.",
+    "latencyMs": 963
+  },
+  {
+    "id": "billing-21",
+    "category": "billing",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "The customer account has an incorrect tariff and a missing meter reading affecting bill generation.",
+    "latencyMs": 1043
+  },
+  {
+    "id": "billing-23",
+    "category": "billing",
+    "priority": "low",
+    "confidence": 0.95,
+    "reason": "The customer is requesting a text label change on generated utility bills.",
+    "latencyMs": 889
+  },
+  {
+    "id": "billing-24",
+    "category": "billing",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Payment posting failed to lift the disconnection status for a utility customer.",
+    "latencyMs": 1093
+  },
+  {
+    "id": "payroll-03",
+    "category": "payroll",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Government contribution rates need updating to ensure accurate payslip deductions.",
+    "latencyMs": 921
+  },
+  {
+    "id": "payroll-04",
+    "category": "payroll",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Biometric attendance sync failure blocks DTR processing and payroll preparation.",
+    "latencyMs": 994
+  },
+  {
+    "id": "payroll-05",
+    "category": "payroll",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "The 13th month pay calculation is missing allowances, affecting employee compensation.",
+    "latencyMs": 759
+  },
+  {
+    "id": "payroll-08",
+    "category": "payroll",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "A newly hired employee is missing from the current payroll cutoff.",
+    "latencyMs": 1240
+  },
+  {
+    "id": "payroll-10",
+    "category": "payroll",
+    "priority": "medium",
+    "confidence": 1,
+    "reason": "Incorrect leave balances affect employee records and need correction in the HR and payroll module.",
+    "latencyMs": 1260
+  },
+  {
+    "id": "payroll-11",
+    "category": "payroll",
+    "priority": "low",
+    "confidence": 0.95,
+    "reason": "The customer is asking a feature question regarding payroll bank export formats.",
+    "latencyMs": 1316
+  },
+  {
+    "id": "payroll-12",
+    "category": "payroll",
+    "priority": "low",
+    "confidence": 0.95,
+    "reason": "The customer is asking a how-to question regarding employee final pay.",
+    "latencyMs": 917
+  },
+  {
+    "id": "payroll-13",
+    "category": "payroll",
+    "priority": "low",
+    "confidence": 1,
+    "reason": "The customer is asking a configuration question about night differential rates in payroll.",
+    "latencyMs": 966
+  },
+  {
+    "id": "payroll-15",
+    "category": "payroll",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "Tax calculation issues related to employee salary adjustments fall under payroll.",
+    "latencyMs": 871
+  },
+  {
+    "id": "payroll-18",
+    "category": "payroll",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "Attendance records and DTR issues fall directly under the HR and Payroll system.",
+    "latencyMs": 938
+  },
+  {
+    "id": "payroll-19",
+    "category": "payroll",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Payslip emails failed to send and department data is incorrect for employees.",
+    "latencyMs": 842
+  },
+  {
+    "id": "payroll-20",
+    "category": "payroll",
+    "priority": "low",
+    "confidence": 0.95,
+    "reason": "The customer is asking a how-to question regarding setting up a new allowance type in the HR and payroll module.",
+    "latencyMs": 921
+  },
+  {
+    "id": "payroll-22",
+    "category": "payroll",
+    "priority": "high",
+    "confidence": 0.95,
+    "reason": "Payroll calculation error causing incorrect deductions in employee compensation.",
+    "latencyMs": 1042
+  },
+  {
+    "id": "payroll-23",
+    "category": "payroll",
+    "priority": "medium",
+    "confidence": 0.95,
+    "reason": "The attendance tracking for updated employee rest days requires a fix in the HR and payroll module.",
+    "latencyMs": 880
+  }
+]

@@ -60,13 +60,16 @@ flowchart LR
 
 ### Measured, not assumed
 
-Triage is scored on a **hand-labelled set of 120 tickets** ([`evals/triage`](evals/triage)), 24 per category, with deliberately hard cases: tickets that fit two teams, Taglish, vague one-liners and tickets with several problems. Prompt changes and the confidence threshold were tuned on the 40-ticket dev split only; the 80-ticket test split is held out.
+Triage is scored on a **hand-labelled set of 120 tickets** ([`evals/triage`](evals/triage)), 24 per category, with deliberately hard cases: tickets that fit two teams, Taglish, vague one-liners and tickets with several problems. The prompt and the confidence threshold were tuned on a 40-ticket dev split; the **80-ticket test split was held out and run once** ([report](evals/triage/results/gemini-3.5-flash-lite-test.md)).
 
-| Dev split (40 tickets), `gemini-3.5-flash-lite` | First prompt | With routing notes | Keyword baseline |
-| --- | --- | --- | --- |
-| Category accuracy | 92.5% | **100%** | 77.5% |
-| Priority, exact | 70% | 70% | 47.5% |
-| Priority, within one level | 100% | 100% | 97.5% |
+| Held-out test split (80 tickets), `gemini-3.5-flash-lite` | Relay AI | Keyword baseline |
+| --- | --- | --- |
+| Category accuracy | **98.8%** (79/80) | 71.3% |
+| Priority, exact | 66.3% | 47.5% (always "medium") |
+| Priority, within one level | 100% | 97.5% |
+| Auto-applied at the 0.9 threshold | 98.8% of tickets, 98.7% of them correct | — |
+
+The one miss is a Taglish ticket about the BIR 1601-C return, which the model sent to Payroll instead of Accounting: a case labelled *ambiguous* in advance, since 1601-C is tax withheld from salaries. Priority is the weaker half: the model tends to rate one level higher than the labels, which is why a person can always change it. On the dev split, adding routing notes to the prompt took category accuracy from 92.5% to 100%.
 
 ```bash
 npm run eval:triage                          # dev split
