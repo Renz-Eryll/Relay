@@ -173,6 +173,11 @@ export default async function LandingPage() {
         <p className="mt-3 max-w-2xl text-muted">
           Relay AI reads every new ticket, drafts replies from tickets that were already solved, and catches agents up when a ticket changes hands. Anything it isn’t sure about goes to a person.
         </p>
+        <p className="mt-5 inline-flex flex-wrap items-baseline gap-x-2 gap-y-1 rounded-[6px] border border-line bg-surface px-4 py-2.5 text-[13px] text-muted">
+          <span className="num text-[20px] font-medium text-brand-ink">98.8%</span>
+          category accuracy on 80 held-out, hand-labelled tickets
+          <span className="num text-faint">· keyword baseline 71.3%</span>
+        </p>
         <div className="mt-10 grid gap-4 lg:grid-cols-3">
           <article className="card flex flex-col p-5">
             <h3 className="font-semibold">Auto-triage</h3>
